@@ -36,8 +36,12 @@ def nav():
 
 def admin_logout():
     session.clear()
-    redirect('/admin')
+    return redirect('/admin')
+
+def store_logout():
+    session.clear()
+    return redirect('/staff')
 
 def logout():
     session.clear()
-    redirect('/')
+    return redirect('/')
