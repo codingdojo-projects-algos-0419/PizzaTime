@@ -17,16 +17,15 @@
                     <h1 class="h5">ADMIN DASHBOARD</h1>
                </div>
                <div class="section">
-                    <h1 class="h3">CURRENT MENU</h1>
+                    <h1 class="h3">MANAGE STAFF</h1>
                     <hr>
                     <div class="row">
                          <div class="col-8">
                               <table class="table">
                                    <thead>
                                         <tr>
-                                             <th scope="col">Topping</th>
-                                             <th scope="col">Price</th>
-                                             <th scope="col">Description</th>
+                                             <th scope="col">Employee Name</th>
+                                             <th scope="col">Username</th>
                                              <th scope="col">Action</th>
                                         </tr>
                                    </thead>
@@ -35,28 +34,31 @@
                                         <tr>
                                              <td></td>
                                              <td></td>
-                                             <td></td>
-                                             <td><a href="#" class="btn btn-sm btn-danger">DELETE</a></td>
+                                             <td><a href="#" class="btn btn-sm btn-danger">Delete</a></td>
                                         </tr>
                                    </tbody>
                               </table>
                          </div>
                          <div class="col-4">
-                              <h3 class="h4">CREATE NEW TOPPING</h3>
+                              <h3 class="h4">MANAGE STAFF</h3>
                               <form class="" action="#" method="post">
                                    <div class="form-group">
-                                        <label for="top_name">Name</label>
-                                       <input type="text" class="form-control" name="top_name" value="">
+                                        <label for="first_sname">First Name</label>
+                                       <input type="text" class="form-control" name="first_name" value="">
                                    </div>
                                    <div class="form-group">
-                                        <label for="description">Description</label>
-                                       <textarea class="form-control" name="description" rows="4" cols="40"></textarea>
+                                        <label for="last_name">Last Name</label>
+                                       <input type="text" class="form-control" name="last_name" value="">
                                    </div>
                                    <div class="form-group">
-                                        <label for="price">Price</label>
-                                       <input type="text" class="form-control" name="price" value="">
+                                        <label for="price">email</label>
+                                       <input type="text" class="form-control" name="email" value="">
                                    </div>
-                                   <input type="submit" class="btn btn-sm btn-primary" value="ADD">
+                                   <div class="form-group">
+                                        <label for="price">Password</label>
+                                       <input type="password" class="form-control" name="password" value="">
+                                   </div>
+                                   <input type="submit" class="btn btn-sm btn-primary" value="ADD STAFF">
                               </form>
                          </div>
                     </div>
