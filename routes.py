@@ -15,6 +15,7 @@ app.add_url_rule('/store/logout', view_func=store_logout)
 #3admin and staff routes
 app.add_url_rule('/admin/dash', view_func=admin_dash)
 app.add_url_rule('/admin/account', view_func=admin_acc)
+app.add_url_rule('/account/edit', view_func=admin_edit)
 app.add_url_rule('/store', view_func=store)
 
 ## customer routes

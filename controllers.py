@@ -15,6 +15,10 @@ def admin_dash():
 def admin_acc():
     return render_template('adaccount.html')
 
+#edit account
+def admin_edit():
+    return render_template('accedit.html')
+
 ## render staff dashboard
 def staff():
     return  render_template('staff.html')
