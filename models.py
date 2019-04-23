@@ -160,7 +160,7 @@ class OtherItem(db.Model):
     __tablename__="other_items"
     id=db.Column(db.Integer,primary_key=True)
     order_id=db.Column(db.Integer,db.ForeignKey('orders.id'),nullable=False)
-    other_items_menu_id=db.Column(db.Integer,db.ForeignKey('other_items_menus.id'),nullable=False)
+    other_items_menu_id=db.Column(db.Integer,db.ForeignKey('other_items_menu.id'),nullable=False)
     qty=db.Column(db.Integer)
     created_at = db.Column(db.DateTime, server_default=func.now())
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
