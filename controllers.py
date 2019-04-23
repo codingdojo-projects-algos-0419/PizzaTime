@@ -1,14 +1,30 @@
 from flask import render_template, redirect, request, session, flash
 from config import db, datetime
-#from models import User
+from models import *
 
 #### Controller Functions ####
 ## render admin/staff login page
 def admin():
     return render_template('admin.html')
 
+def staff_login():
+    employee=Staff.validate_login(request.form)
+    if employee:
+        session['employee_id']=employee.id
+        session['user_name']=employee.first_name+' '+employee.last_name
+        session['login_session']=Staff.get_session_key(employee.id)
+        if employee.user_level<6:
+            return redirect('/staff/dash')
+        if employee.user_level>=6:
+            return redirect('/admin/dash')
+    return redirect('/staff/login')
+
 #render admin dashboard
 def admin_dash():
+    if not 'employee_id' in session.keys():
+        return redirect('/staff/login')
+    if not Staff.is_logged_in_as_admin:
+        return redirect('/')
     return render_template('admindash.html')
 
 #admin account controller

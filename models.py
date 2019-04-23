@@ -96,10 +96,11 @@ class Customer(db.Model):
 
 
 class StatusEnum(enum.Enum):
-    entering="Entering" 
+    # enum to track the current status of an order
+    entering="Entering" # The customer has started creating an order, but not submitted it to the kitchen.
     entered="Entered"   # The customer has just submitted the order
     ready="Ready"       # The order is ready for the delivery or customer pickup
-    canceled="Canceled"
+    canceled="Canceled" # The customer has canceled their current order.
 
 class Order(db.Model):
     __tablename__="orders"

@@ -3,6 +3,7 @@ from controllers import *
 
 ## master routes ##
 app.add_url_rule('/admin', view_func=admin)
+app.add_url_rule('/staff/login', view_func=staff_login, methods=["POST"])
 app.add_url_rule('/staff', view_func=staff)
 app.add_url_rule('/', view_func=index)
 app.add_url_rule('/user/login', view_func=members)
