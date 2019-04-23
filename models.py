@@ -77,6 +77,22 @@ class Customer(db.Model):
     @classmethod
     def get_all(cls):
         return cls.query.all()
+    @classmethod
+    def validate_login(cls,form):
+        user=cls.query.filter_by(email=form['email_address']).first()
+        print(user)
+        if user:
+            if bcrypt.check_password_hash(user.password,form['password']):
+                return user
+        return None
+    @classmethod
+    def is_logged_in(cls,user_id,login_session):
+        user=cls.query.get(user_id)
+        result=False
+        if user:
+            if bcrypt.check_password_hash(login_session,str(user.created_at)):
+                result=True
+        return result
 
 
 class StatusEnum(enum.Enum):
@@ -370,3 +386,34 @@ class Staff(db.Model):
         return cls.query.filter(cls.user_level<6).all()
     def get_all_admins(cls):
         return cls.query.filter(cls.user_level>=6).all()
+    @classmethod
+    def get_session_key(cls,user_id):
+        user=cls.query.get(user_id)
+        session_key=bcrypt.generate_password_hash(str(user.created_at))
+        return session_key
+    @classmethod
+    def validate_login(cls,form):
+        user=cls.query.filter_by(email=form['email_address']).first()
+        print(user)
+        if user:
+            if bcrypt.check_password_hash(user.password,form['password']):
+                return user
+        return None
+    @classmethod
+    def is_logged_in(cls,user_id,login_session):
+        user=cls.query.get(user_id)
+        result=False
+        if user:
+            if bcrypt.check_password_hash(login_session,str(user.created_at)):
+                result=True
+        return result
+    @classmethod
+    def is_logged_in_as_admin(cls,admin_id,login_session):
+        user=cls.query.get(admin_id)
+        result=False
+        if user:
+            if bcrypt.check_password_hash(login_session,str(user.created_at)):
+                if user.user_level==9:
+                    print("admin login_success")
+                    result=True
+        return result
