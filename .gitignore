@@ -2,3 +2,6 @@
 .DS_Store
 pizza.db
 py3PtimeEnv
+migrations
+__pycache__
+.vscode
