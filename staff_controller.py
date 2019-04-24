@@ -7,8 +7,14 @@ from staff_model import Staff
 def admin():
     return render_template('admin.html')
 
+## render staff dashboard
+def staff():
+    return  render_template('staff.html')
+
 def staff_login():
+    # print(' staff_login '*20)
     employee=Staff.validate_login(request.form)
+    # print('*'*80,employee)
     if employee:
         session['employee_id']=employee.id
         session['user_name']=employee.first_name+' '+employee.last_name
@@ -27,6 +33,9 @@ def admin_dash():
         return redirect('/')
     return render_template('admindash.html')
 
+def create_topping():
+    pass
+    
 #admin account controller
 def admin_acc():
     return render_template('adaccount.html')
@@ -43,10 +52,6 @@ def admin_nav():
 def admin_logout():
     session.clear()
     return redirect('/admin')
-
-## render staff dashboard
-def staff():
-    return  render_template('staff.html')
 
 ## render staff dashboard
 def store():

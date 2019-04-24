@@ -16,7 +16,7 @@ class Order(db.Model):
     __tablename__="orders"
     id=db.Column(db.Integer,primary_key=True)
     customer_id=db.Column(db.Integer,db.ForeignKey('customers.id'),nullable=False)
-    order_type_id=db.Column(db.Integer)
+    order_type_id=db.Column(db.Integer,db.ForeignKey('order_type.id'),nullable=False)
     status=db.Column(db.Enum(StatusEnum))
     note=db.Column(db.String(255))
     created_at = db.Column(db.DateTime, server_default=func.now())
@@ -121,8 +121,8 @@ class Style(db.Model):
 
 class Topping(db.Model):
     __tablename__="toppings"
-    pizza_id=db.Column(db.Integer,primary_key=True)
-    toppings_menu_id=db.Column(db.Integer,primary_key=True)
+    pizza_id=db.Column(db.Integer,db.ForeignKey('pizzas.id'),primary_key=True)
+    toppings_menu_id=db.Column(db.Integer,db.ForeignKey('toppings_menu.id'),primary_key=True)
     created_at = db.Column(db.DateTime, server_default=func.now())
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
     info=db.relationship('ToppingMenu',foreign_keys=[toppings_menu_id],uselist=False)

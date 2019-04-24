@@ -10,10 +10,11 @@ class Staff(db.Model):
     __tablename__="staff"
     id=db.Column(db.Integer,primary_key=True)
     username=db.Column(db.String(255))
+    password=db.Column(db.String(255))
     email=db.Column(db.String(255))
     first_name=db.Column(db.String(255))
     last_name=db.Column(db.String(255))
-    user_level=db.Column(db.Integer)
+    user_level=db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, server_default=func.now())
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
     def update_username(self,new_username):
@@ -59,35 +60,56 @@ class Staff(db.Model):
         errors=[]
         return errors
     @classmethod
-    def new(cls,customer_info):
+    def create_default_admin(cls):
         '''
-        customer_info=[username':string,'password':string, 'name':string,'email':string,'phone':string]
+        Create a default administrator to start the database with.
+        Normally you would call this only from a command line python session.
         '''
-        hashed_pwd=bcrypt.generate_password_hash(customer_info['password'])
-        new_customer=cls(username=customer_info['username'],password=hashed_pwd,name=customer_info['name'], email=customer_info['email'],phone_number=customer_info['phone'])
-        db.session.add(new_customer)
-        db.session.commit()
-        return new_customer
+        staff_info={'username': 'admin', 'first_name': 'default', 'last_name': 'admin', 'password': 'changeme', 'email':''}
+        admin=cls.new(staff_info)
+        admin.make_admin()
+        return admin
     @classmethod
-    def get(cls,customer_id):
-        return cls.query.get(customer_id)
+    def new(cls,staff_info):
+        '''
+        staff_info=[username':string,'password':string, 'first_name':string,'last_name':string; 'email':string]
+        run Staff.validate_info(staff_info) before calling this method
+        '''
+        hashed_pwd=bcrypt.generate_password_hash(staff_info['password'])
+        new_staff=cls(username=staff_info['username'],password=hashed_pwd,first_name=staff_info['first_name'],last_name=staff_info['last_name'], email=staff_info['email'],user_level=0)
+        db.session.add(new_staff)
+        db.session.commit()
+        return new_staff
+    @classmethod
+    def delete(cls,staffer_id):
+        staffer=cls.query.get(staffer_id)
+        db.session.delete(staffer)
+        db.session.commit()
+    @classmethod
+    def get(cls,staffer_id):
+        return cls.query.get(staffer_id)
     @classmethod
     def get_all(cls):
         return cls.query.all()
     @classmethod
     def get_all_staff(cls):
         return cls.query.filter(cls.user_level<6).all()
+    @classmethod
     def get_all_admins(cls):
         return cls.query.filter(cls.user_level>=6).all()
     @classmethod
-    def get_session_key(cls,user_id):
-        user=cls.query.get(user_id)
+    def get_session_key(cls,staffer_id):
+        user=cls.query.get(staffer_id)
         session_key=bcrypt.generate_password_hash(str(user.created_at))
         return session_key
     @classmethod
     def validate_login(cls,form):
-        user=cls.query.filter_by(email=form['email_address']).first()
-        print(user)
+        '''
+        form=['username':string,'password':string]
+        '''
+        # print(form)
+        user=cls.query.filter(cls.username==form['username']).first()
+        # print('*'*80,user)
         if user:
             if bcrypt.check_password_hash(user.password,form['password']):
                 return user
