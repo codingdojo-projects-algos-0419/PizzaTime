@@ -5,6 +5,7 @@ from controllers import *
 # Restaurant Welcome page
 app.add_url_rule('/', view_func=index)
 # Customer Login
+app.add_url_rule('/register', view_func=register)
 app.add_url_rule('/user/login', view_func=members)
 # Customer Registration
 # Customer dashboard
