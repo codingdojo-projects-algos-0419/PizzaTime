@@ -6,8 +6,8 @@
           <title>Pizza Time | Index</title>
           <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-          <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-          <script src="{{ url_for('static', filename='script.js') }}"></script>
+          <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> -->
+          <!-- <script src="{{ url_for('static', filename='script.js') }}"></script> -->
      </head>
      <body>
           <div class="container">
@@ -15,18 +15,33 @@
                <div class="header">
                     <div class="row">
                          <div class="col-4">
-                             <h1>Welcome to Black Belt Pizza</h1>
+                             <!-- <h1 class="h4">Black Belt Pizza</h1> -->
                          </div>
                          <div class="col-4">
-                              <a href="/register">Don't have an account? Register</a>
+                              <!-- <a href="/register">Don't have an account? Register</a> -->
                          </div>
                          <div class="col-4">
-                              <a href="/user/login">Already have an account? Login</a>
+                              <!-- <a href="/user/login">Already have an account? Login</a> -->
                          </div>
                     </div>
                </div>
+               <div class="section">
+                    <div class="row">
+                         <div class="col-lg-8 offset-lg-2 my-auto">
+                              <h1 class="display-4 text-center text-md-left">Welcome to Black Belt Pizza</h1>
 
+                              <p class="text-muted">Order your spacialized concierge pizza, created with exquisit precision by our Ninja staff. To order, register or login below.</p>
+                              <p class=text-center>
+                                   <a class="btn btn-primary shadow" href="/register">Register</a>
 
+                                   <a class="btn btn-primary-soft" href="/user/login">Login</a>
+                              </p>
+                         </div>
+                         <!-- <div class="col-4 offset-2"> -->
+                              <!-- <img src="#" alt="Image of featured pizza"> -->
+                         </div>
+                    </div>
+               </div>
           </div>
      </body>
 </html>
