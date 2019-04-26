@@ -24,3 +24,8 @@ hr {
      border-top: 1px solid #f8f8f8;
      border-bottom: 1px solid rgba(0,0,0,0.2);
 }
+
+.section{
+     padding: 5px;
+     background-color: rgba(255, 255, 255, 0.3);
+}

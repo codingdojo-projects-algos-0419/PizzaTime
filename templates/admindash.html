@@ -36,21 +36,23 @@
                                    </thead>
                                    <tbody>
                                         <!-- add templete loop here -->
+                                        {% for topping in topping_menu: %}
                                         <tr>
                                              <td><input type="checkbox" name="active-toppings-bulk" value="">
                                              <label for="active-toppings-bulk"></label></td>
-                                             <td></td>
-                                             <td></td>
-                                             <td></td>
+                                             <td>{{topping.name}}</td>
+                                             <td>{{topping.price}}</td>
+                                             <td>{{topping.description}}</td>
                                              <td><a href="#" class="btn btn-sm btn-danger">UPDATE</a></td>
                                         </tr>
+                                        {% endfor %}
                                         <!-- end template loops here -->
                                    </tbody>
                               </table>
                          </div>
                          <div class="col-4">
                               <h3 class="h4">CREATE NEW TOPPING</h3>
-                              <form class="" action="/create_topping" method="post">
+                              <form class="" action="/admin/create_topping" method="post">
                                    <div class="form-group">
                                         <label for="top_name">Name</label>
                                        <input type="text" class="form-control" name="top_name" value="">

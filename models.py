@@ -142,9 +142,11 @@ class ToppingMenu(db.Model):
     available=db.Column(db.Boolean)
     created_at = db.Column(db.DateTime, server_default=func.now())
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
+    def update(self):
+        db.session.commit()
     @classmethod
     def new(cls,name,description,price):
-        new_record=cls(name=name,description=description,price=price)
+        new_record=cls(name=name,description=description,price=price,available=True)
         db.session.add(new_record)
         db.session.commit()
         return new_record
@@ -155,6 +157,12 @@ class ToppingMenu(db.Model):
     @classmethod
     def get_all(cls):
         return cls.query.all()
+    @classmethod
+    def set_availability(cls,id,available):
+        topping=cls.query.get(id)
+        topping.available=available
+        db.session.commit()
+        return "OK"
 
 class OtherItem(db.Model):
     __tablename__="other_items"

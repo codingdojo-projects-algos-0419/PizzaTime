@@ -31,11 +31,26 @@ def admin_dash():
         return redirect('/staff/login')
     if not Staff.is_logged_in_as_admin:
         return redirect('/')
-    return render_template('admindash.html')
+    topping_menu=ToppingMenu.get_all()
+    return render_template('admindash.html',topping_menu=topping_menu)
 
 def create_topping():
-    pass
-    
+    print(request.form)
+    new_topping=ToppingMenu.new(request.form['top_name'],request.form['description'],request.form['price'])
+    # maybe change to Ajax partial:
+    # return render_template('topping_menu_item.html',topping=new_topping)
+    return redirect('/admin/dash')
+
+def update_topping():
+    print(request.form)
+    topping=ToppingMenu.query.get(request.form['topping_id'])
+    # todo: add code to save to db
+    return "OK"
+
+def update_topping_availability():
+    print(request.form)
+    return Topping.set_availability(request.form['topping_id'],request.form['availability'])
+
 #admin account controller
 def admin_acc():
     return render_template('adaccount.html')
