@@ -8,6 +8,9 @@ from customer_model import Customer, Address, State
 def index():
     return render_template('index.html')
 
+def register():
+    return render_template('register.html')
+
 def members():
     return render_template('login.html')
 
