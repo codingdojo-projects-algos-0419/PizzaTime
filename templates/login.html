@@ -24,11 +24,18 @@
                </div>
                <div class="section">
                     <h1 class="h4 text-center">Welcome Back!</h1>
-                    <form class="col-lg-6 offset-lg-3" action="#" method="post">
+                         {% with messages=get_flashed_messages() %}
+                              {% if messages %}
+                                   {% for message in messages %}
+                                        <p class="text-danger">{{message}}</p>
+                                   {% endfor %}
+                              {% endif %}
+                         {% endwith %}
+                         <form class="col-lg-6 offset-lg-3" action="/user/do_login" method="post">
                          <div class="row justify-content-center">
                               <div class="col-6">
                                    <label for="email">Email</label>
-                                   <input type="text" class="form-control" name="email" value="">
+                                   <input type="text" class="form-control" name="email_address" value="">
                               </div>
                          </div>
                          <div class="row justify-content-center">
