@@ -5,9 +5,13 @@ from controllers import *
 # Restaurant Welcome page
 app.add_url_rule('/', view_func=index)
 # Customer Login
-app.add_url_rule('/register', view_func=register)
-app.add_url_rule('/user/login', view_func=members)
+app.add_url_rule('/user/login', view_func=show_login)
+app.add_url_rule('/user/do_login',view_func=do_login,methods=['POST'])
+
 # Customer Registration
+app.add_url_rule('/user/register', view_func=show_registration)
+app.add_url_rule('/user/do_registration', view_func=do_registration,methods=['POST'])
+
 # Customer dashboard
 app.add_url_rule('/nav', view_func=nav)
 app.add_url_rule('/logout', view_func=logout)

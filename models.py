@@ -37,6 +37,14 @@ class Order(db.Model):
     def delete(cls, order):
         db.session.delete(order)
         db.session.commit()
+    @classmethod
+    def get_entered(cls):
+        orders=cls.query.filter(cls.status==StatusEnum.entered).all()
+        return orders
+    @classmethod
+    def get_ready(cls):
+        orders=cls.query.filter(cls.status==StatusEnum.ready).all()
+        return orders
 
 class OrderType(db.Model):
     # This will probably just be "pickup" or "delivery":  The table will likely only contain these two records.

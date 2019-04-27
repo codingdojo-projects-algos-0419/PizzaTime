@@ -40,6 +40,15 @@
                </div>
                <div class="section">
                     <h1 class="h5">CURRENT ORDERS</h1>
+                    <ol>
+                    {% for order in orders: %}
+                         <li>{{order.pizza.size}} {{order.pizza.style}}
+                              {% for topping in order.pizza.toppings %}
+                                   {{topping.name}}
+                              {% endfor %}
+                         </li>
+                    {% endfor %}
+                    </ol>
                </div>
           </div>
      </body>

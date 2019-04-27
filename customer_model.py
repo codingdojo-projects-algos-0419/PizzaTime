@@ -5,13 +5,14 @@ from config import *
 
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 PW_REGEX = re.compile('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$')
+PHONE_REGEX=re.compile('^\d{3}-\d{3}-\d{4}$')
 
 class Customer(db.Model):
     __tablename__="customers"
     id=db.Column(db.Integer,primary_key=True)
-    username=db.Column(db.String(255),nullable=False)
+    username=db.Column(db.String(255))
     name=db.Column(db.String(255))
-    email=db.Column(db.String(255))
+    email=db.Column(db.String(255),nullable=False)
     phone_number=db.Column(db.String(20))
     password=db.Column(db.String(255))
     favorite_order_id=db.Column(db.Integer)
@@ -35,28 +36,53 @@ class Customer(db.Model):
         self.note=new_note
         db.session.commit()
     @classmethod
-    def validate_username(cls,name):
+    def validate_username(cls,username):
         errors=[]
+        existing_users=cls.query.filter(cls.username==username).count()
+        if (existing_users)>0:
+            errors.append("This user's first and last name is already registered!")
         return errors
     @classmethod
-    def validate_password(cls,name):
+    def validate_password(cls, password, confirm_password):
         errors=[]
+        if len(password)<5:
+            errors.append("Password must be at least 5 characters long!")
+        if password!=confirm_password:
+            errors.append("Passwords don't match!")
         return errors
     @classmethod
     def validate_name(cls,name):
         errors=[]
+        if len(name)<3:
+            errors.append("Please enter your name (at leat 3 characters).")
+        # if not name.isalpha():
+        #     errors.append("Names must be alphabet characters only!")
         return errors
     @classmethod
-    def validate_email(cls,name):
+    def validate_email(cls,email_address):
         errors=[]
+        if not EMAIL_REGEX.match(email_address):    # test whether a field matches the pattern
+            errors.append("Invalid email address!")
+        existing_users=cls.query.filter_by(email=email_address).count()
+        if (existing_users)>0:
+            errors.append("This email address is currently in use by another user!")
         return errors
     @classmethod
-    def validate_phone(cls,name):
+    def validate_phone(cls,phone_number):
         errors=[]
+        if len(phone_number)<7:
+            errors.append("Please enter a valid 10 digit phone number.")
+        # if not PHONE_REGEX.match(phone_number):
+        #     errors.append("Please enter a valid phone number.")
         return errors
     @classmethod
     def validate_info(cls,customer_info):
         errors=[]
+        # errors+=validate_username(customer_info['username'])
+        errors+=cls.validate_name(customer_info['name'])
+        errors+=cls.validate_password(customer_info['password'],customer_info['confirm_password'])
+        errors+=cls.validate_email(customer_info['email_address'])
+        errors+=cls.validate_phone(customer_info['phone_number'])
         return errors
     @classmethod
     def new(cls,customer_info):
@@ -64,7 +90,8 @@ class Customer(db.Model):
         customer_info=[username':string,'password':string, 'name':string,'email':string,'phone':string]
         '''
         hashed_pwd=bcrypt.generate_password_hash(customer_info['password'])
-        new_customer=cls(username=customer_info['username'],password=hashed_pwd,name=customer_info['name'], email=customer_info['email'],phone_number=customer_info['phone'])
+        # new_customer=cls(username=customer_info['username'],password=hashed_pwd,name=customer_info['name'], email=customer_info['email'],phone_number=customer_info['phone'])
+        new_customer=cls(username=customer_info['email_address'],password=hashed_pwd,name=customer_info['name'], email=customer_info['email_address'],phone_number=customer_info['phone_number'])
         db.session.add(new_customer)
         db.session.commit()
         return new_customer
@@ -90,6 +117,11 @@ class Customer(db.Model):
             if bcrypt.check_password_hash(login_session,str(user.created_at)):
                 result=True
         return result
+    @classmethod
+    def get_session_key(cls,id):
+        user=cls.query.get(id)
+        session_key=bcrypt.generate_password_hash(str(user.created_at))
+        return session_key
 
 class Address(db.Model):
     __tablename__="addresses"

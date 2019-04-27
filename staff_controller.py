@@ -68,9 +68,10 @@ def admin_logout():
     session.clear()
     return redirect('/admin')
 
-## render staff dashboard
+## render kitchen orders dashboard
 def store():
-    return  render_template('restdash.html')
+    orders=Order.get_entered()
+    return  render_template('restdash.html',orders=orders)
 
 def store_logout():
     session.clear()
