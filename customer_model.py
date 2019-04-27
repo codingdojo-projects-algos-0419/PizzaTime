@@ -78,7 +78,7 @@ class Customer(db.Model):
     @classmethod
     def validate_info(cls,customer_info):
         errors=[]
-        # errors+=validate_username(customer_info['username'])
+        #errors+=validate_username(customer_info['username'])
         errors+=cls.validate_name(customer_info['name'])
         errors+=cls.validate_password(customer_info['password'],customer_info['confirm_password'])
         errors+=cls.validate_email(customer_info['email_address'])
@@ -139,7 +139,7 @@ class Address(db.Model):
         new_address=cls(customer_id=address['customer_id'],street_address=address['street_address'],city=address['city'],state_id=address['city'])
         db.session.add(new_address)
         db.session.commit()
-    
+
 
 class State(db.Model):
     __tablename__="states"
