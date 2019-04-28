@@ -148,7 +148,7 @@ class State(db.Model):
     created_at = db.Column(db.DateTime, server_default=func.now())
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
     @classmethod
-    def add(cls,name):
+    def new(cls,name):
         state=cls(name=name)
         db.session.add(state)
         db.session.commit()

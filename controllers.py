@@ -23,7 +23,7 @@ def do_registration():
         session['MyWebsite_user_id']=customer.id
         session['name']=customer.name
         session['login_session']=Customer.get_session_key(customer.id)
-        return redirect ('/nav')
+        return redirect ('/quick')
     return redirect ('/user/register')
 
 def show_login():
@@ -36,13 +36,24 @@ def do_login():
         session['MyWebsite_user_id']=customer.id
         session['name']=customer.name
         session['login_session']=Customer.get_session_key(customer.id)
-        return redirect('/nav')
+        return redirect('/quick')
     flash('Email or Password is incorrect.')
     return redirect('/user/login')
 
 ## render quick order page
 def quick():
     return render_template('quick.html')
+
+def show_custompizza():
+    # customer_id=session['MyWebsite_user_id']
+    # customer=Customer.get(customer_id)
+    # orders=customer.orders
+    orders=None
+    sizes=Size.get_all()
+    print(sizes)
+    styles=Style.get_all()
+    toppings_menu=ToppingMenu.get_all()
+    return render_template('custompizza.html',sizes=sizes,styles=styles,toppings_menu=toppings_menu,orders=orders)
 
 ## customer nav partial
 def nav():

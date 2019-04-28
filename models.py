@@ -166,6 +166,9 @@ class ToppingMenu(db.Model):
     def get_all(cls):
         return cls.query.all()
     @classmethod
+    def get_all_available(cls):
+        return cls.query.filter(cls.available==True).all()
+    @classmethod
     def set_availability(cls,id,available):
         topping=cls.query.get(id)
         topping.available=available

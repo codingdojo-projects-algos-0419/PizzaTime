@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Black Belt Pizza</title>
+</head>
+<body>
+    <div class="container">
+        <div id="nav"></div>
+        <div class="section">
+            <div id="order-summary">
+                {#}
+                {% for pizza in order.pizzas %}
+                <div>
+                    {{pizza.size.name}}
+                    {{pizza.style.name}}
+                    {% for topping in pizza.toppings %}
+                    {{topping.name}}
+                    {{% endfor %}}
+                </div>
+                {% endfor%}
+                #}
+            </div>
+                <form action="">
+                <input type="number" name="qty">
+                <select name="" id="">
+                    {% for ordertype in ordertypes %}
+                    <option value="">{{ordertype.name}}</option>
+                    {% endfor%}
+                </select>
+                <select name="" id="">
+                    {% for size in sizes %}
+                    <option value="">{{size.name}}</option>
+                    {% endfor %}
+                </select>
+                <select name="" id="">
+                    {% for style in styles %}
+                    <option value="">{{style.name}}</option>
+                    {% endfor %}
+                </select>
+                <div>
+                    {% for topping in toppings_menu %}
+                    <input type="checkbox" name="topping" value="{{topping.id}}">{{topping.name}}<br>
+                    {% endfor %}
+                </div>
+                <input type="submit" value="Add To Order">
+            </form>
+        </div>
+    </div>
+</body>
+</html>

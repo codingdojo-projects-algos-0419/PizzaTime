@@ -15,6 +15,7 @@ app.add_url_rule('/user/do_registration', view_func=do_registration,methods=['PO
 # Customer dashboard
 app.add_url_rule('/nav', view_func=nav)
 app.add_url_rule('/logout', view_func=logout)
+app.add_url_rule('/create',view_func=show_custompizza)
 
 ## customer routes
 app.add_url_rule('/quick', view_func=quick)

@@ -32,7 +32,9 @@ def admin_dash():
     if not Staff.is_logged_in_as_admin:
         return redirect('/')
     topping_menu=ToppingMenu.get_all()
-    return render_template('admindash.html',topping_menu=topping_menu)
+    sizes=Size.get_all()
+    styles=Style.get_all()
+    return render_template('admindash.html',topping_menu=topping_menu,sizes=sizes,styles=styles)
 
 def create_topping():
     print(request.form)
@@ -50,6 +52,16 @@ def update_topping():
 def update_topping_availability():
     print(request.form)
     return Topping.set_availability(request.form['topping_id'],request.form['availability'])
+
+def create_style():
+    print(request.form)
+    new_style=Style.new(request.form['name'],request.form['description'],request.form['price'])
+    return redirect('/admin/dash')
+
+def create_size():
+    print(request.form)
+    new_size=Size.new(request.form['name'],request.form['description'],request.form['price'])
+    return redirect('/admin/dash')
 
 #admin account controller
 def admin_acc():
