@@ -74,6 +74,10 @@ def nav():
 def add_pizza():
     customer_id=session['MyWebsite_customer_id']
     customer=Customer.get(customer_id)
+    print("add pizza form:",request.form)
+    # toppings=request.form.getlist('topping')
+    # for topping_id in toppings:
+    #     print("topping: ",topping_id)
     orders=customer.orders
     if not orders:
         order=Order.new(customer_id)

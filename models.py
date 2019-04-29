@@ -86,12 +86,16 @@ class Pizza(db.Model):
     size=db.relationship('Size',foreign_keys=[size_id],backref=db.backref("pizzas"),uselist=False)
     @classmethod
     def new(cls,order_id,form):
-        size_id=form['size_id']
-        style_id=form['style_id']
+        size_id=form['size']
+        style_id=form['style']
         qty=form['qty']
-        new_pizza=cls(order=order_id,size_id=size_id,style_id=style_id,qty=qty)
+        new_pizza=cls(order_id=order_id,size_id=size_id,style_id=style_id,qty=qty)
         db.session.add(new_pizza)
         db.session.commit()
+        topping_ids=request.form.getlist('topping')
+        for topping_id in topping_ids:
+            print("topping: ",topping_id)
+            topping=Topping.new(new_pizza.id,topping_id)
         return new_pizza
 
 class Size(db.Model):
@@ -158,7 +162,7 @@ class Topping(db.Model):
     pizza=db.relationship('Pizza',foreign_keys=[pizza_id],backref=db.backref("toppings",cascade="all,delete-orphan"))
     @classmethod
     def new(cls,pizza_id,toppings_menu_id):
-        new_topping=cls(pizza_id=pizz_id,toppings_menu_id=toppings_menu_id)
+        new_topping=cls(pizza_id=pizza_id,toppings_menu_id=toppings_menu_id)
         db.session.add(new_topping)
         db.session.commit()
 
