@@ -25,19 +25,19 @@
             </div>
             <form action="/add_pizza" method="POST">
                 <input type="number" name="qty" value="1">
-                <select name="" id="">
+                <select name="order_type" id="">
                     {% for ordertype in order_types %}
-                    <option value="">{{ordertype.name}}</option>
+                    <option value="{{ordertype.id}}">{{ordertype.name}}</option>
                     {% endfor%}
                 </select>
-                <select name="" id="">
+                <select name="size" id="">
                     {% for size in sizes %}
-                    <option value="">{{size.name}}</option>
+                    <option value="{{size.id}}">{{size.name}}</option>
                     {% endfor %}
                 </select>
-                <select name="" id="">
+                <select name="style" id="">
                     {% for style in styles %}
-                    <option value="">{{style.name}}</option>
+                    <option value="{{style.id}}">{{style.name}}</option>
                     {% endfor %}
                 </select>
                 <div>
