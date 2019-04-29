@@ -20,7 +20,7 @@ def do_registration():
         flash(error)
     if len(errors)==0:
         customer=Customer.new(request.form)
-        session['MyWebsite_user_id']=customer.id
+        session['MyWebsite_customer_id']=customer.id
         session['name']=customer.name
         session['login_session']=Customer.get_session_key(customer.id)
         return redirect ('/quick')
@@ -33,7 +33,7 @@ def do_login():
     #validate login credentials, redirect to ordering page
     customer=Customer.validate_login(request.form)
     if customer:
-        session['MyWebsite_user_id']=customer.id
+        session['MyWebsite_customer_id']=customer.id
         session['name']=customer.name
         session['login_session']=Customer.get_session_key(customer.id)
         return redirect('/quick')
@@ -45,19 +45,44 @@ def quick():
     return render_template('quick.html')
 
 def show_custompizza():
-    # customer_id=session['MyWebsite_user_id']
-    # customer=Customer.get(customer_id)
-    # orders=customer.orders
-    orders=None
+    # print('customer id',session['MyWebsite_customer_id'])
+    customer_id=session['MyWebsite_customer_id']
+    # print('customer id',customer_id)
+    customer=Customer.get(customer_id)
+    # print(customer)
+    orders=customer.orders
+    # print(orders)
+    if not orders:
+        order=Order.new(customer_id)
+    else:
+        order=customer.orders[len(customer.orders)-1]
+        if order.status!=StatusEnum.entering:
+            order=Order.new(customer_id)
     sizes=Size.get_all()
-    print(sizes)
+    # print(sizes)
     styles=Style.get_all()
+    order_types=OrderType.get_all()
+    # print("order types:",order_types)
     toppings_menu=ToppingMenu.get_all()
-    return render_template('custompizza.html',sizes=sizes,styles=styles,toppings_menu=toppings_menu,orders=orders)
+    return render_template('custompizza.html',sizes=sizes,styles=styles,toppings_menu=toppings_menu,order_types=order_types,order=order)
+    # return render_template('custompizza.html')
 
 ## customer nav partial
 def nav():
     return render_template('nav.html')
+
+def add_pizza():
+    customer_id=session['MyWebsite_customer_id']
+    customer=Customer.get(customer_id)
+    orders=customer.orders
+    if not orders:
+        order=Order.new(customer_id)
+    else:
+        order=customer.orders[len(customer.orders)-1]
+        if order.status!=StatusEnum.entering:
+            order=Order.new(customer_id)
+    new_pizza=Pizza.new(order.id,request.form)
+    return redirect('/create')
 
 def logout():
     session.clear()

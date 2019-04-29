@@ -24,8 +24,10 @@ class Order(db.Model):
     customer=db.relationship('Customer', foreign_keys=[customer_id],  backref=db.backref("orders",cascade="all,delete-orphan"))
     order_type=db.relationship('OrderType', foreign_keys=[order_type_id], backref=db.backref("orders",uselist=False,cascade="all, delete-orphan"))
     @classmethod
-    def new(cls,customer_id,order_type,note):
-        new_order=cls(customer_id=cusomer_id,order_type_id=order_type.id,note=note)
+    def new(cls,customer_id,note=""):
+        order_type=OrderType.query.first()
+        # print('order type:',order_type.name)
+        new_order=cls(customer_id=customer_id,order_type_id=order_type.id,status=StatusEnum.entering,note=note)
         db.session.add(new_order)
         db.session.commit()
         return new_order
@@ -53,16 +55,22 @@ class OrderType(db.Model):
     name=db.Column(db.String(255))
     created_at = db.Column(db.DateTime, server_default=func.now())
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
+    def update(self, name):
+        self.name=name
+        db.session.commit()
     @classmethod
     def new(cls,name):
         new_type=cls(name=name)
         db.session.add(new_type)
-        db.commit()
+        db.session.commit()
         return new_type
     @classmethod
     def get_by_name(cls,name):
         order=cls.query.filter(cls.name==name).first()
         return order
+    @classmethod
+    def get_all(cls):
+        return cls.query.all()
 
 class Pizza(db.Model):
     __tablename__="pizzas"
@@ -77,7 +85,10 @@ class Pizza(db.Model):
     style=db.relationship('Style',foreign_keys=[style_id],backref=db.backref("pizzas"),uselist=False)
     size=db.relationship('Size',foreign_keys=[size_id],backref=db.backref("pizzas"),uselist=False)
     @classmethod
-    def new(cls,order_id,size_id,style_id,qty=1):
+    def new(cls,order_id,form):
+        size_id=form['size_id']
+        style_id=form['style_id']
+        qty=form['qty']
         new_pizza=cls(order=order_id,size_id=size_id,style_id=style_id,qty=qty)
         db.session.add(new_pizza)
         db.session.commit()
@@ -91,6 +102,11 @@ class Size(db.Model):
     price=db.Column(db.Float)
     created_at = db.Column(db.DateTime, server_default=func.now())
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
+    def update(self,form):
+        self.name=form['name']
+        self.description=form['description']
+        self.price=form['price']
+        db.session.commit()
     @classmethod
     def new(cls,name,description,price):
         new_record=cls(name=name,description=description,price=price)
@@ -113,6 +129,11 @@ class Style(db.Model):
     price=db.Column(db.Float)
     created_at = db.Column(db.DateTime, server_default=func.now())
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
+    def update(self,form):
+        self.name=form['name']
+        self.description=form['description']
+        self.price=form['price']
+        db.session.commit()
     @classmethod
     def new(cls,name,description,price):
         new_record=cls(name=name,description=description,price=price)
@@ -150,7 +171,10 @@ class ToppingMenu(db.Model):
     available=db.Column(db.Boolean)
     created_at = db.Column(db.DateTime, server_default=func.now())
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
-    def update(self):
+    def update(self,form):
+        self.name=form['name']
+        self.description=form['description']
+        self.price=form['price']
         db.session.commit()
     @classmethod
     def new(cls,name,description,price):
