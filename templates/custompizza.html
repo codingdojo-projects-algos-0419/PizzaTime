@@ -11,22 +11,22 @@
         <div id="nav"></div>
         <div class="section">
             <div id="order-summary">
-                {#}
+
                 {% for pizza in order.pizzas %}
                 <div>
                     {{pizza.size.name}}
                     {{pizza.style.name}}
                     {% for topping in pizza.toppings %}
                     {{topping.name}}
-                    {{% endfor %}}
+                    {% endfor %}
                 </div>
                 {% endfor%}
-                #}
+
             </div>
-                <form action="">
-                <input type="number" name="qty">
+            <form action="/add_pizza" method="POST">
+                <input type="number" name="qty" value="1">
                 <select name="" id="">
-                    {% for ordertype in ordertypes %}
+                    {% for ordertype in order_types %}
                     <option value="">{{ordertype.name}}</option>
                     {% endfor%}
                 </select>

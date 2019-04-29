@@ -28,13 +28,14 @@ def staff_login():
 #render admin dashboard
 def admin_dash():
     if not 'employee_id' in session.keys():
-        return redirect('/staff/login')
+        return redirect('/staff')
     if not Staff.is_logged_in_as_admin:
         return redirect('/')
     topping_menu=ToppingMenu.get_all()
     sizes=Size.get_all()
     styles=Style.get_all()
-    return render_template('admindash.html',topping_menu=topping_menu,sizes=sizes,styles=styles)
+    order_types=OrderType.get_all()
+    return render_template('admindash.html',topping_menu=topping_menu,sizes=sizes,styles=styles, order_types=order_types)
 
 def create_topping():
     print(request.form)
@@ -46,7 +47,7 @@ def create_topping():
 def update_topping():
     print(request.form)
     topping=ToppingMenu.query.get(request.form['topping_id'])
-    # todo: add code to save to db
+    topping.update(request.form)
     return "OK"
 
 def update_topping_availability():
@@ -58,9 +59,28 @@ def create_style():
     new_style=Style.new(request.form['name'],request.form['description'],request.form['price'])
     return redirect('/admin/dash')
 
+def update_style():
+    style=Style.query.get(request.form['style_id'])
+    style.update(request.form)
+    return redirect('/admin/dash')
+
 def create_size():
     print(request.form)
     new_size=Size.new(request.form['name'],request.form['description'],request.form['price'])
+    return redirect('/admin/dash')
+
+def update_size():
+    size=Size.query.get(request.form['size_id'])
+    size.update(request.form)
+    return redirect('/admin/dash')
+
+def create_order_type():
+    order_type=OrderType.new(request.form['name'])
+    return redirect('/admin/dash')
+
+def update_order_type():
+    order_type=OrderType.query.get(request.form['order_type_id'])
+    order_type.update(request.form['name'])
     return redirect('/admin/dash')
 
 #admin account controller
