@@ -19,6 +19,7 @@ class Customer(db.Model):
     note=db.Column(db.String(255))
     created_at = db.Column(db.DateTime, server_default=func.now())
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
+    
     def update_name(self,new_name):
         self.name=new_name
         db.session.commit()
