@@ -52,7 +52,7 @@
                                    {% endfor %}
                               </li>
                               <br>
-                              {{order.customer.name}} ({{order.customer.phone_number}}), 
+                              {{order.customer.name}} ({{order.customer.phone_number}}), {{order.customer.addresses[0].street_address}}, {{order.customer.addresses[0].city}} {{order.customer.addresses[0].state.name}}
                               {% endfor %}
                          </ol>
                          <!-- Put a button here. It should update a the display using a script.-->
