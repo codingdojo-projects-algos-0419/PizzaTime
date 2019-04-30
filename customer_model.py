@@ -137,10 +137,14 @@ class Address(db.Model):
     customer=db.relationship('Customer',foreign_keys=[customer_id],backref=db.backref("addresses",cascade="all,delete-orphan"))
     @classmethod
     def new(cls,customer_id,address):
-        new_address=cls(customer_id=customer_id,street_address=address['street_address'],city=address['city'],state_id=address['state_id'])
+        state=State.by_name(address['state'])
+        if not state:
+            state=State.new(address['state'])
+        print("Address:",address)
+        new_address=cls(customer_id=customer_id,street_address=address['street_address'],city=address['city'],state_id=state.id)
         db.session.add(new_address)
         db.session.commit()
-
+        return new_address
 
 class State(db.Model):
     __tablename__="states"
@@ -153,6 +157,10 @@ class State(db.Model):
         state=cls(name=name)
         db.session.add(state)
         db.session.commit()
+        return state
     @classmethod
     def get_all(cls):
         return cls.query.all()
+    @classmethod
+    def by_name(cls,name):
+        return cls.query.filter(cls.name==name).first()

@@ -24,6 +24,11 @@ class Order(db.Model):
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
     customer=db.relationship('Customer', foreign_keys=[customer_id],  backref=db.backref("orders",cascade="all,delete-orphan"))
     order_type=db.relationship('OrderType', foreign_keys=[order_type_id], backref=db.backref("orders",uselist=False,cascade="all, delete-orphan"))
+    def submit(self):
+        self.status=StatusEnum.entered
+        db.session.commit()
+    def ship_it(self):
+        self.status=StatusEnum.ready
     @classmethod
     def new(cls,customer_id,note=""):
         order_type=OrderType.query.first()
@@ -90,6 +95,8 @@ class Pizza(db.Model):
         size_id=form['size']
         style_id=form['style']
         qty=form['qty']
+        if int(qty)<1:
+            qty="1"
         new_pizza=cls(order_id=order_id,size_id=size_id,style_id=style_id,qty=qty)
         db.session.add(new_pizza)
         db.session.commit()

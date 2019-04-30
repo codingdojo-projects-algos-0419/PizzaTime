@@ -13,7 +13,7 @@ def show_registration():
 
 def do_registration():
     #validate new user data, create new user, redirect to ordering page
-    print (request.form)
+    # print (request.form)
     errors=Customer.validate_info(request.form)
     print(errors)
     for error in errors:
