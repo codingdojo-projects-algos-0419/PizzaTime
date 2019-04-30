@@ -1,10 +1,10 @@
 from config import app
 from staff_controller import *
 
-## master routes ##
+## master routes ## 
 # Staff Login
 app.add_url_rule('/admin', view_func=admin)
-app.add_url_rule('/staff', view_func=staff)
+#app.add_url_rule('/staff', view_func=staff)
 app.add_url_rule('/staff/login', view_func=staff_login, methods=["POST"])
 
 

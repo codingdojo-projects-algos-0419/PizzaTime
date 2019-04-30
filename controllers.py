@@ -50,20 +50,17 @@ def show_custompizza():
     # print('customer id',customer_id)
     customer=Customer.get(customer_id)
     # print(customer)
-    orders=customer.orders
-    # print(orders)
-    if not orders:
+    order=Order.get_entering(customer.id)
+    if not order:
         order=Order.new(customer_id)
-    else:
-        order=customer.orders[len(customer.orders)-1]
-        if order.status!=StatusEnum.entering:
-            order=Order.new(customer_id)
+    print(order)
     sizes=Size.get_all()
     # print(sizes)
     styles=Style.get_all()
     order_types=OrderType.get_all()
     # print("order types:",order_types)
     toppings_menu=ToppingMenu.get_all()
+    print(order.pizzas)
     return render_template('custompizza.html',sizes=sizes,styles=styles,toppings_menu=toppings_menu,order_types=order_types,order=order)
     # return render_template('custompizza.html')
 
@@ -75,16 +72,9 @@ def add_pizza():
     customer_id=session['MyWebsite_customer_id']
     customer=Customer.get(customer_id)
     print("add pizza form:",request.form)
-    # toppings=request.form.getlist('topping')
-    # for topping_id in toppings:
-    #     print("topping: ",topping_id)
-    orders=customer.orders
-    if not orders:
+    order=Order.get_entering(customer.id)
+    if not order:
         order=Order.new(customer_id)
-    else:
-        order=customer.orders[len(customer.orders)-1]
-        if order.status!=StatusEnum.entering:
-            order=Order.new(customer_id)
     new_pizza=Pizza.new(order.id,request.form)
     return redirect('/create')
 

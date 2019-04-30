@@ -8,8 +8,8 @@ def admin():
     return render_template('admin.html')
 
 ## render staff dashboard
-def staff():
-    return  render_template('staff.html')
+#def staff():
+#    return  render_template('staff.html')
 
 def staff_login():
     # print(' staff_login '*20)
@@ -23,12 +23,12 @@ def staff_login():
             return redirect('/staff/dash')
         if employee.user_level>=6:
             return redirect('/admin/dash')
-    return redirect('/staff/login')
+    return redirect('/admin')
 
 #render admin dashboard
 def admin_dash():
     if not 'employee_id' in session.keys():
-        return redirect('/staff')
+        return redirect('/admin')
     if not Staff.is_logged_in_as_admin:
         return redirect('/')
     topping_menu=ToppingMenu.get_all()
@@ -90,7 +90,7 @@ def admin_acc():
 #edit account
 def admin_edit():
     return render_template('accedit.html')
-    
+
 ## admin nav partial
 def admin_nav():
     return render_template('adminnav.html')

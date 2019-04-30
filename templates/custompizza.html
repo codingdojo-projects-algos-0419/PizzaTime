@@ -13,20 +13,23 @@
 <body>
     <div class="container">
         <div id="nav"></div>
-        <div class="section">
-            <div id="order-summary">
-
-                {% for pizza in order.pizzas %}
-                <div>
-                    {{pizza.size.name}}
-                    {{pizza.style.name}}
-                    {% for topping in pizza.toppings %}
-                    {{topping.name}}
-                    {% endfor %}
-                </div>
-                {% endfor%}
-
+        <div class="section d-inline-block align-top" id="order-summary">
+            <h2>Order Summary</h2>
+            {% for pizza in order.pizzas %}
+            <div>
+                <p>
+                {{pizza.qty}}
+                {{pizza.size.name}}
+                {{pizza.style.name}}
+                {% for topping in pizza.toppings %}
+                {{topping.info.name}}
+                {% endfor %}
+                </p>
             </div>
+            {% endfor%}
+
+        </div>
+        <div class="section d-inline-block">
             <form action="/add_pizza" method="POST">
                 <input type="number" name="qty" value="1">
                 <select name="order_type" id="">
