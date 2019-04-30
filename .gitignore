@@ -4,4 +4,6 @@ pizza.db
 .DS_Store
 py3PtimeEnv/
 set_up/.DS_Store
-.vscode
+.vscode/
+__pycache__/
+

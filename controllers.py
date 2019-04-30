@@ -1,7 +1,31 @@
 from flask import render_template, redirect, request, session, flash
-from config import db, datetime
+from config import db, datetime, stripe_keys
 from models import *
 from customer_model import Customer, Address, State
+
+# Stripe API #
+# https://stripe.com/docs/testing
+# https://testdriven.io/blog/adding-a-custom-stripe-checkout-to-a-flask-app/
+import stripe
+
+
+def show_checkout():
+    print(stripe_keys['publishable_key'])
+    return render_template('checkout.html',key=stripe_keys['publishable_key'])
+def charge():
+    # amount in cents
+    amount = 500
+    customer = stripe.Customer.create(
+        email='sample@customer.com',
+        source=request.form['stripeToken']
+    )
+    stripe.Charge.create(
+        customer=customer.id,
+        amount=amount,
+        currency='usd',
+        description='Flask Charge'
+    )
+    return render_template('charge.html', amount=amount)
 
 ### Customer controllers
 ## render index page with login and registration forms
@@ -77,6 +101,7 @@ def add_pizza():
         order=Order.new(customer_id)
     new_pizza=Pizza.new(order.id,request.form)
     return redirect('/create')
+
 
 def logout():
     session.clear()
