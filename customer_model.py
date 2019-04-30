@@ -94,6 +94,7 @@ class Customer(db.Model):
         new_customer=cls(username=customer_info['email_address'],password=hashed_pwd,name=customer_info['name'], email=customer_info['email_address'],phone_number=customer_info['phone_number'])
         db.session.add(new_customer)
         db.session.commit()
+        address=Address.new(new_customer.id,customer_info)
         return new_customer
     @classmethod
     def get(cls,customer_id):
@@ -135,8 +136,8 @@ class Address(db.Model):
     state=db.relationship('State',foreign_keys=[state_id],uselist=False)
     customer=db.relationship('Customer',foreign_keys=[customer_id],backref=db.backref("addresses",cascade="all,delete-orphan"))
     @classmethod
-    def new(cls,address):
-        new_address=cls(customer_id=address['customer_id'],street_address=address['street_address'],city=address['city'],state_id=address['city'])
+    def new(cls,customer_id,address):
+        new_address=cls(customer_id=customer_id,street_address=address['street_address'],city=address['city'],state_id=address['state_id'])
         db.session.add(new_address)
         db.session.commit()
 

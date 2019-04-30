@@ -1,7 +1,7 @@
 ### ORM models for Orders, Pizza, and related db ### 
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, and_,or_
 from config import *
 import enum
 
@@ -11,6 +11,7 @@ class StatusEnum(enum.Enum):
     entered="Entered"   # The customer has just submitted the order
     ready="Ready"       # The order is ready for the delivery or customer pickup
     canceled="Canceled" # The customer has canceled their current order.
+    completed="Completed" # The customer has received their order.
 
 class Order(db.Model):
     __tablename__="orders"
@@ -41,7 +42,7 @@ class Order(db.Model):
         db.session.commit()
     @classmethod
     def get_entered(cls):
-        orders=cls.query.filter(cls.status==StatusEnum.entered).all()
+        orders=cls.query.filter(or_(cls.status==StatusEnum.entered,cls.status==StatusEnum.ready)).all()
         return orders
     @classmethod
     def get_ready(cls):

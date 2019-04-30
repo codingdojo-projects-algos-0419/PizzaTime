@@ -7,7 +7,6 @@ app.add_url_rule('/admin', view_func=admin)
 app.add_url_rule('/staff', view_func=staff)
 app.add_url_rule('/staff/login', view_func=staff_login, methods=["POST"])
 
-# Kitchen Staff Dashboard
 
 # Admin Dashboard
 app.add_url_rule('/admin/nav', view_func=admin_nav)
@@ -24,5 +23,6 @@ app.add_url_rule('/admin/update_style', view_func=update_style,methods=["POST"])
 app.add_url_rule('/admin/create_order_type', view_func=create_order_type,methods=["POST"])
 app.add_url_rule('/admin/update_order_type',view_func=update_order_type,methods=["POST"])
 
+# Kitchen Staff Dashboard
 app.add_url_rule('/store/logout', view_func=store_logout)
 app.add_url_rule('/store', view_func=store)

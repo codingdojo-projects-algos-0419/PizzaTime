@@ -40,15 +40,24 @@
                </div>
                <div class="section">
                     <h1 class="h5">CURRENT ORDERS</h1>
-                    <ol>
+                    <ul>
                     {% for order in orders: %}
-                         <li>{{order.pizza.size}} {{order.pizza.style}}
-                              {% for topping in order.pizza.toppings %}
-                                   {{topping.name}}
+                         <li>
+                         {{order.id}}: {{order.order_type.name}} <br>
+                              <ol>
+                              {% for pizza in order.pizzas %}
+                              <li>Size {{pizza.size.name}}, {{pizza.style.name}} crust:
+                                   {% for topping in pizza.toppings %}
+                                        {{topping.info.name}}
+                                   {% endfor %}
+                              </li>
+                              <br>
+                              {{order.customer.name}} ({{order.customer.phone_number}}), 
                               {% endfor %}
-                         </li>
+                         </ol>
+                         <!-- Put a button here. It should update a the display using a script.-->
                     {% endfor %}
-                    </ol>
+                    </ul>
                </div>
           </div>
           <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
