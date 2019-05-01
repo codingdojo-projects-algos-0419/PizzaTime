@@ -53,6 +53,10 @@ class Order(db.Model):
     def get_ready(cls):
         orders=cls.query.filter(cls.status==StatusEnum.ready).all()
         return orders
+    @classmethod
+    def get_entering(cls,customer_id):
+        order=cls.query.filter(cls.customer_id==customer_id).filter(cls.status==StatusEnum.entering).first()
+        return order
 
 class OrderType(db.Model):
     # This will probably just be "pickup" or "delivery":  The table will likely only contain these two records.

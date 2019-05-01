@@ -1,7 +1,31 @@
 from flask import render_template, redirect, request, session, flash
-from config import db, datetime
+from config import db, datetime, stripe_keys
 from models import *
 from customer_model import Customer, Address, State
+
+# Stripe API #
+# https://stripe.com/docs/testing
+# https://testdriven.io/blog/adding-a-custom-stripe-checkout-to-a-flask-app/
+import stripe
+
+
+def show_checkout():
+    print(stripe_keys['publishable_key'])
+    return render_template('checkout.html',key=stripe_keys['publishable_key'])
+def charge():
+    # amount in cents
+    amount = 500
+    customer = stripe.Customer.create(
+        email='sample@customer.com',
+        source=request.form['stripeToken']
+    )
+    stripe.Charge.create(
+        customer=customer.id,
+        amount=amount,
+        currency='usd',
+        description='Flask Charge'
+    )
+    return render_template('charge.html', amount=amount)
 
 ### Customer controllers
 ## render index page with login and registration forms
@@ -56,20 +80,17 @@ def show_custompizza():
     # print('customer id',customer_id)
     customer=Customer.get(customer_id)
     # print(customer)
-    orders=customer.orders
-    # print(orders)
-    if not orders:
+    order=Order.get_entering(customer.id)
+    if not order:
         order=Order.new(customer_id)
-    else:
-        order=customer.orders[len(customer.orders)-1]
-        if order.status!=StatusEnum.entering:
-            order=Order.new(customer_id)
+    print(order)
     sizes=Size.get_all()
     # print(sizes)
     styles=Style.get_all()
     order_types=OrderType.get_all()
     # print("order types:",order_types)
     toppings_menu=ToppingMenu.get_all()
+    print(order.pizzas)
     return render_template('custompizza.html',sizes=sizes,styles=styles,toppings_menu=toppings_menu,order_types=order_types,order=order)
     # return render_template('custompizza.html')
 
@@ -84,22 +105,15 @@ def add_pizza():
     customer_id=session['MyWebsite_customer_id']
     customer=Customer.get(customer_id)
     print("add pizza form:",request.form)
-    # toppings=request.form.getlist('topping')
-    # for topping_id in toppings:
-    #     print("topping: ",topping_id)
-    orders=customer.orders
-    if not orders:
+    order=Order.get_entering(customer.id)
+    if not order:
         order=Order.new(customer_id)
-    else:
-        order=customer.orders[len(customer.orders)-1]
-        if order.status!=StatusEnum.entering:
-            order=Order.new(customer_id)
     new_pizza=Pizza.new(order.id,request.form)
     return redirect('/create')
 
 #render account page
 def cust_account():
-    
+
     return render_template('account.html')
 
 def logout():
