@@ -20,3 +20,4 @@ app.add_url_rule('/add_pizza',view_func=add_pizza,methods=['POST'])
 
 ## customer routes
 app.add_url_rule('/quick', view_func=quick)
+app.add_url_rule('/account', view_func=cust_account)

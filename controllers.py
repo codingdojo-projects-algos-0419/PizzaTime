@@ -42,7 +42,13 @@ def do_login():
 
 ## render quick order page
 def quick():
-    return render_template('quick.html')
+    name = session['name']
+    userid = session['MyWebsite_customer_id']
+    print(name)
+    return render_template('quick.html',
+    name = name,
+    userid = userid,
+    )
 
 def show_custompizza():
     # print('customer id',session['MyWebsite_customer_id'])
@@ -69,7 +75,10 @@ def show_custompizza():
 
 ## customer nav partial
 def nav():
-    return render_template('nav.html')
+    name = session['name']
+    return render_template('nav.html',
+    name = name
+    )
 
 def add_pizza():
     customer_id=session['MyWebsite_customer_id']
@@ -87,6 +96,11 @@ def add_pizza():
             order=Order.new(customer_id)
     new_pizza=Pizza.new(order.id,request.form)
     return redirect('/create')
+
+#render account page
+def cust_account():
+    
+    return render_template('account.html')
 
 def logout():
     session.clear()

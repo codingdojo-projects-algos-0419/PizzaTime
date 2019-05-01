@@ -17,10 +17,12 @@ class Staff(db.Model):
     user_level=db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, server_default=func.now())
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
+    
     def __repr(self):
         return '<Staff{}>'.format(self.username)
     def __repr(self):
-        return '<Staff{}>'.format(self.first_name)      
+        return '<Staff{}>'.format(self.first_name)
+
     def update_username(self,new_username):
         self.username=new_username
         db.session.commit()

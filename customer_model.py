@@ -19,7 +19,7 @@ class Customer(db.Model):
     note=db.Column(db.String(255))
     created_at = db.Column(db.DateTime, server_default=func.now())
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
-    
+
     def update_name(self,new_name):
         self.name=new_name
         db.session.commit()
@@ -102,7 +102,7 @@ class Customer(db.Model):
         return cls.query.get(customer_id)
     @classmethod
     def get_all(cls):
-        return cls.query.all()
+        return cls.query.all()        
     @classmethod
     def validate_login(cls,form):
         user=cls.query.filter_by(email=form['email_address']).first()
