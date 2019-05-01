@@ -14,48 +14,69 @@
     <div class="container">
         <div id="nav"></div>
         <div class="section d-inline-block align-top" id="order-summary">
-            <h2>Order Summary</h2>
-            {% for pizza in order.pizzas %}
-            <div>
-                <p>
-                {{pizza.qty}}
-                {{pizza.size.name}}
-                {{pizza.style.name}}
-                {% for topping in pizza.toppings %}
-                {{topping.info.name}}
-                {% endfor %}
-                </p>
+            <div class="row">
+                 <div class="col-lg-8">
+                      <h2>Order Summary</h2>
+                      <table class="table table-striped table-dark">
+                           <thead>
+                                <tr>
+                                     <th>Qty</th>
+                                     <th>Size</th>
+                                     <th>Style</th>
+                                     <th>Toppings</th>
+                                     <th>Action</th>
+                                </tr>
+                           </thead>
+                           <tbody>
+                                {% for pizza in order.pizzas %}
+                                <tr>
+                                     <td>{{pizza.qty}}</td>
+                                     <td>{{pizza.size.name}}</td>
+                                     <td>{{pizza.style.name}}</td>
+                                     {% for topping in pizza.toppings %}
+                                     <td>{{topping.info.name}}</td>
+                                     {% endfor %}
+                                     <td>
+                                          <a href="#">remove</a>
+                                     </td>
+                                {% endfor%}
+                                </tr>
+                           </tbody>
+                      </table>
+                      <!--  -->
+                      <p>Subtotal: $</p>
+                      <a class="btn btn-sm btn-primary"href="/checkout">Submit Order</a>
+                 </div>
+                 <div class="col-lg-4">
+                      <form action="/add_pizza" method="POST">
+                          <input type="number" name="qty" value="1">
+                          <select name="order_type" id="">
+                              {% for ordertype in order_types %}
+                              <option value="{{ordertype.id}}">{{ordertype.name}}</option>
+                              {% endfor%}
+                          </select>
+                          <select name="size" id="">
+                              {% for size in sizes %}
+                              <option value="{{size.id}}">{{size.name}}</option>
+                              {% endfor %}
+                          </select>
+                          <select name="style" id="">
+                              {% for style in styles %}
+                              <option value="{{style.id}}">{{style.name}}</option>
+                              {% endfor %}
+                          </select>
+                          <div>
+                              {% for topping in toppings_menu %}
+                              <input type="checkbox" name="topping" value="{{topping.id}}">{{topping.name}}<br>
+                              {% endfor %}
+                          </div>
+                          <input class="btn btn-sm btn-primary" type="submit" value="ADD TO ORDER">
+                      </form>
+                 </div>
             </div>
-            {% endfor%}
-
-        </div>
-        <div class="section d-inline-block">
-            <form action="/add_pizza" method="POST">
-                <input type="number" name="qty" value="1">
-                <select name="order_type" id="">
-                    {% for ordertype in order_types %}
-                    <option value="{{ordertype.id}}">{{ordertype.name}}</option>
-                    {% endfor%}
-                </select>
-                <select name="size" id="">
-                    {% for size in sizes %}
-                    <option value="{{size.id}}">{{size.name}}</option>
-                    {% endfor %}
-                </select>
-                <select name="style" id="">
-                    {% for style in styles %}
-                    <option value="{{style.id}}">{{style.name}}</option>
-                    {% endfor %}
-                </select>
-                <div>
-                    {% for topping in toppings_menu %}
-                    <input type="checkbox" name="topping" value="{{topping.id}}">{{topping.name}}<br>
-                    {% endfor %}
-                </div>
-                <input type="submit" value="Add To Order">
-            </form>
-        </div>
+       </div>
     </div>
+    <script src="https://unpkg.com/ionicons@4.5.5/dist/ionicons.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>

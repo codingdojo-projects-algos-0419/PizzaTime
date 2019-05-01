@@ -5,7 +5,7 @@ from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from datetime import datetime
 import re
-import stripe
+#import stripe
 
 app = Flask(__name__)
 # configurations to tell our app about the database we'll be connecting to
@@ -20,12 +20,12 @@ bcrypt = Bcrypt(app)
 
 # Stripe API #
 # Strip API keys go in a folder above called StripeAPIkeys.txt
-f = open("..\StripeAPIkeys.txt", "r")
-stripe_keys = {
-  'publishable_key': f.readline(),
-  'secret_key': f.readline()
-}
-f.close()
-stripe.api_key = stripe_keys['secret_key']
+#f = open("..\StripeAPIkeys.txt", "r")
+#stripe_keys = {
+#  'publishable_key': f.readline(),
+#  'secret_key': f.readline()
+#}
+#f.close()
+#stripe.api_key = stripe_keys['secret_key']
 # print("Public key",stripe_keys['publishable_key'])
 # print("Secret key",stripe_keys['secret_key'])

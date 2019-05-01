@@ -1,14 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+     <meta charset="utf-8">
+    <meta name="Pizza TIme" content="An intuitive food ordering app.">
+    <title>Black Belt Pizza | Check Out</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <body>
-    <div>
-        <h2>Buy for $5.00</h2>
+    <div class="container">
+        <div id="nav"></div>
+        <h2>Your Order</h2>
+        <table class="table table-striped table-dark">
+             <thead>
+                  <tr>
+                       <th>Qty</th>
+                       <th>Size</th>
+                       <th>Style</th>
+                       <th>Toppings</th>
+                       <th>Cost</th>
+                       <th>Action</th>
+                  </tr>
+             </thead>
+             <tbody>
+                  {% for pizza in order.pizzas %}
+                  <tr>
+                       <td>{{pizza.qty}}</td>
+                       <td>{{pizza.size.name}}</td>
+                       <td>{{pizza.style.name}}</td>
+
+                       <td>{% for topping in pizza.toppings %}
+                       {{topping.info.name}}
+                       {% endfor %}</td>
+                       <td>$$$</td>
+                       <td>
+                            <a href="#">remove</a>
+                       </td>
+                  {% endfor%}
+                  </tr>
+             </tbody>
+        </table>
+        <!--  -->
+        <h4>Price: $ 5.00</h4>
+        <a class="btn btn-sm btn-primary" href="#">Purchase</a>
+        <a class="btn btn-sm btn-warning" href="#">Start Over</a>
+
+        <!-- <h2>Buy for $5.00</h2> -->
+        <p></p>
         <form action="/charge" method="post">
             <script
             src="https://checkout.stripe.com/checkout.js"
@@ -20,5 +60,7 @@
             </script>
         </form>
     </div>
+    <script src="https://unpkg.com/ionicons@4.5.5/dist/ionicons.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>
