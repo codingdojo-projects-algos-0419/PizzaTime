@@ -91,6 +91,8 @@ def admin_acc():
 def admin_edit():
     return render_template('accedit.html')
 
+def edit_user():
+    return redirect('/adaccount')
 ## admin nav partial
 def admin_nav():
     return render_template('adminnav.html')

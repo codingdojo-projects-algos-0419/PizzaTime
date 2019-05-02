@@ -23,4 +23,4 @@ app.add_url_rule('/charge',view_func=charge,methods=['POST'])
 ## customer routes
 app.add_url_rule('/quick', view_func=quick)
 app.add_url_rule('/account', view_func=cust_account)
-app.add_url_rule('/account/update', view_func=cust_update)
+app.add_url_rule('/account/update', view_func=cust_update, methods=['POST'])
