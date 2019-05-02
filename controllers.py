@@ -6,7 +6,7 @@ from customer_model import Customer, Address, State
 # Stripe API #
 # https://stripe.com/docs/testing
 # https://testdriven.io/blog/adding-a-custom-stripe-checkout-to-a-flask-app/
-#import stripe
+import stripe
 
 
 def show_checkout():
@@ -15,7 +15,7 @@ def show_checkout():
     customer=Customer.get(customer_id)
     order=Order.get_entering(customer.id)
     return render_template('checkout.html',
-    order=order) #,key=stripe_keys['publishable_key'])
+    order=order,key=stripe_keys['publishable_key'])
 
 def charge():
     # amount in cents
