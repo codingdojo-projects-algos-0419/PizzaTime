@@ -20,6 +20,9 @@ class Customer(db.Model):
     created_at = db.Column(db.DateTime, server_default=func.now())
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
 
+    def __repr__(self):
+        return '<User {}>'.format(self.name)
+
     def update_name(self,new_name):
         self.name=new_name
         db.session.commit()
@@ -102,7 +105,7 @@ class Customer(db.Model):
         return cls.query.get(customer_id)
     @classmethod
     def get_all(cls):
-        return cls.query.all()        
+        return cls.query.all()
     @classmethod
     def validate_login(cls,form):
         user=cls.query.filter_by(email=form['email_address']).first()
@@ -124,6 +127,15 @@ class Customer(db.Model):
         user=cls.query.get(id)
         session_key=bcrypt.generate_password_hash(str(user.created_at))
         return session_key
+#
+    @classmethod
+    def edit_user(cls,form):
+        cust_update = Customer.query.get(session['MyWebsite_customer_id'])
+        cust_update.name = form['name']
+        cust_update.email = form['email']
+        cust_update.phone_number = form['phone']
+        db.session.commit()
+        return cust_update.name
 
 class Address(db.Model):
     __tablename__="addresses"

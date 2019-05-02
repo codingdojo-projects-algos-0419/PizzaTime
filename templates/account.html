@@ -20,7 +20,7 @@
                          <!-- <h1 class="h3">Hello {{name}}, Select your Order Type</h1> -->
                          <div class="row">
                               <div class="col-lg-6 col-sm-4">
-                                   <form class="col-lg-8 offset-lg-2" action="" method="post">
+                                   <form class="col-lg-8 offset-lg-2" action="/account/update" method="post">
                                         <!-- <div class="form-row"> -->
                                              <div class="form-row">
                                                   <label for="name">Name</label>
@@ -33,11 +33,11 @@
                                         </div>
                                         <div class="form-row">
                                              <label for="email">Email</label>
-                                             <input type="text" class="form-control" name="email_address" value="{{customer.email}}">
+                                             <input type="text" class="form-control" name="email" value="{{customer.email}}">
                                         </div>
                                         <div class="form-row">
                                              <label for="phone">Phone</label>
-                                             <input type="tel" class="form-control" name="phone_number" value="{{customer.phone_number}}">
+                                             <input type="tel" class="form-control" name="phone" value="{{customer.phone_number}}">
                                         </div>
                                         <div class="form-row">
                                              <label for="street_address">Address</label>

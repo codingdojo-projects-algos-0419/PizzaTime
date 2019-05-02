@@ -127,7 +127,8 @@ def cust_account():
     )
 #
 def cust_update():
-    return redirect('/account')    
+    update = Customer.edit_user(request.form)
+    return redirect('/account')
 
 def logout():
     session.clear()

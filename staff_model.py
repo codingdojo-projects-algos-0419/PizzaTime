@@ -17,7 +17,7 @@ class Staff(db.Model):
     user_level=db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, server_default=func.now())
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
-    
+
     def __repr(self):
         return '<Staff{}>'.format(self.username)
     def __repr(self):
@@ -139,3 +139,13 @@ class Staff(db.Model):
                     print("admin login_success")
                     result=True
         return result
+#
+
+    @classmethod
+    def edit_user(cls,form):
+        acc_update = Staff.query.get(session[''])
+        cust_update.name = form['name']
+        cust_update.email = form['email']
+        cust_update.phone_number = form['phone']
+        db.session.commit()
+        return cust_update.name
