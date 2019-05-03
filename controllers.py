@@ -42,7 +42,8 @@ def charge():
     order.submit()
     # socket io sends a message to any connected browser connections 
     # might be able to replace "order" with a render_template(partial)
-    socketio.emit('neworder',order.id, namespace='/restdash')
+    # socketio.emit('neworder',order.id, namespace='/restdash')
+    socketio.emit('neworder',render_template('restpartial.html',order=order),namespace='/restdash')
     # show a response to the user.
     return render_template('charge.html', amount=amount)
 
