@@ -2,6 +2,7 @@ from flask import render_template, redirect, request, session, flash
 from config import db, datetime
 from models import *
 from staff_model import Staff
+from flask_socketio import SocketIO,emit
 
 ## render admin/staff login page
 def admin():
@@ -110,3 +111,12 @@ def store():
 def store_logout():
     session.clear()
     return redirect('/staff')
+
+@socketio.on('my event')                          # Decorator to catch an event called "my event":
+def test_message(message):                        # test_message() is the event callback function.
+    emit('my response', {'data': 'got it!'})  
+
+@socketio.on('connect', namespace='/restdash')
+def restdash_connect():
+    # fires when restdash.html connects to the io socket
+    print('Client connected')
