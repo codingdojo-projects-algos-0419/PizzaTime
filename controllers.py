@@ -6,7 +6,8 @@ from customer_model import Customer, Address, State
 # Stripe API #
 # https://stripe.com/docs/testing
 # https://testdriven.io/blog/adding-a-custom-stripe-checkout-to-a-flask-app/
-#import stripe
+# Visa card test number: 4242424242424242
+import stripe
 
 
 def show_checkout():
@@ -15,21 +16,30 @@ def show_checkout():
     customer=Customer.get(customer_id)
     order=Order.get_entering(customer.id)
     return render_template('checkout.html',
-    order=order) #,key=stripe_keys['publishable_key'])
+    order=order,key=stripe_keys['publishable_key'])
 
 def charge():
-    # amount in cents
-    amount = 500
-    customer = stripe.Customer.create(
-        email='sample@customer.com',
+    # Action route handler from Stripe
+    customer_id=session['MyWebsite_customer_id']
+    customer=Customer.get(customer_id)
+    order=Order.get_entering(customer.id)
+    # Stripe token
+    stripe_customer = stripe.Customer.create(
+        email=customer.email,
         source=request.form['stripeToken']
     )
+    # amount in cents, must be type int
+    amount=int(order.total()*100)
+    # Process charge with stripe token
     stripe.Charge.create(
-        customer=customer.id,
+        customer=stripe_customer.id,
         amount=amount,
         currency='usd',
-        description='Flask Charge'
+        description='OrderID:'+str(order.id)
     )
+    # change order status so it shows up in kitchen dashboard
+    order.submit()
+    # show a response to the user.
     return render_template('charge.html', amount=amount)
 
 ### Customer controllers

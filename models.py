@@ -29,6 +29,14 @@ class Order(db.Model):
         db.session.commit()
     def ship_it(self):
         self.status=StatusEnum.ready
+    def total(self):
+        total=0.0
+        for pizza in self.pizzas:
+            pizza_price=(pizza.size.price+pizza.style.price)
+            for topping in pizza.toppings:
+                pizza_price+=topping.info.price
+            total+=pizza_price*pizza.qty
+        return round(total,2)
     @classmethod
     def new(cls,customer_id,note=""):
         order_type=OrderType.query.first()
@@ -94,6 +102,13 @@ class Pizza(db.Model):
     order=db.relationship('Order',foreign_keys=[order_id],backref=db.backref("pizzas",cascade="all,delete-orphan"))
     style=db.relationship('Style',foreign_keys=[style_id],backref=db.backref("pizzas"),uselist=False)
     size=db.relationship('Size',foreign_keys=[size_id],backref=db.backref("pizzas"),uselist=False)
+    def price(self):
+        total=0.0
+        total=(self.size.price+self.style.price)
+        for topping in self.toppings:
+            total+=topping.info.price
+        total+=total*self.qty
+        return round(total,2)
     @classmethod
     def new(cls,order_id,form):
         size_id=form['size']

@@ -34,7 +34,7 @@
                        <td>{% for topping in pizza.toppings %}
                        {{topping.info.name}}
                        {% endfor %}</td>
-                       <td>$$$</td>
+                       <td>${{pizza.price()}}</td>
                        <td>
                             <a href="#">remove</a>
                        </td>
@@ -43,20 +43,26 @@
              </tbody>
         </table>
         <!--  -->
-        <h4>Price: $ 5.00</h4>
+        <h4>Total: $ {{order.total()}}</h4>
         <a class="btn btn-sm btn-primary" href="#">Purchase</a>
         <a class="btn btn-sm btn-warning" href="#">Start Over</a>
 
         <!-- <h2>Buy for $5.00</h2> -->
         <p></p>
-        <form action="/charge" method="post">
+        <form action="/charge" method="POST">
+          <!-- On form submit, the credit card info and publishable key are sent to Stripe -->
+          <!-- Stripe store info and returns token to form's action route -->
             <script
             src="https://checkout.stripe.com/checkout.js"
             class="stripe-button"
             data-key="{{ key }}"
-            data-description="A Flask Charge"
-            data-amount="500"
-            data-locale="auto">
+            data-name="BlackBeltPizza"
+            data-description="OrderID:{{order.id}}"
+            {% set total= order.total()*100 %}
+            data-amount={{total}}
+            data-locale="auto"
+            data-email="{{order.customer.email}}">
+            {% data-image="http://url_of_deployed_project" %}
             </script>
         </form>
     </div>
