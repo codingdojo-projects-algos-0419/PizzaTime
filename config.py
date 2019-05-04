@@ -6,6 +6,7 @@ from flask_bcrypt import Bcrypt
 from datetime import datetime
 import re
 import stripe
+from flask_socketio import SocketIO
 
 app = Flask(__name__)
 # configurations to tell our app about the database we'll be connecting to
@@ -30,3 +31,5 @@ bcrypt = Bcrypt(app)
 
 #print("Public key",stripe_keys['publishable_key'])
 #print("Secret key",stripe_keys['secret_key'])
+
+socketio = SocketIO(app)

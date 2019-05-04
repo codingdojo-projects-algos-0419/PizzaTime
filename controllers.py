@@ -8,6 +8,7 @@ from customer_model import Customer, Address, State
 # https://testdriven.io/blog/adding-a-custom-stripe-checkout-to-a-flask-app/
 # Visa card test number: 4242424242424242
 import stripe
+from flask_socketio import SocketIO
 
 
 def show_checkout():
@@ -39,6 +40,10 @@ def charge():
     )
     # change order status so it shows up in kitchen dashboard
     order.submit()
+    # socket io sends a message to any connected browser connections 
+    # might be able to replace "order" with a render_template(partial)
+    # socketio.emit('neworder',order.id, namespace='/restdash')
+    socketio.emit('neworder',render_template('restpartial.html',order=order),namespace='/restdash')
     # show a response to the user.
     return render_template('charge.html', amount=amount)
 

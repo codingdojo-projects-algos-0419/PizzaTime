@@ -1,0 +1,15 @@
+<li class="section my-3" order_id="{{order.id}}">
+        {{order.id}}: {{order.order_type.name}} <br>
+             <ol>
+                  {% for pizza in order.pizzas %}
+                  <li>Qty {{pizza.qty}}, Size {{pizza.size.name}}, {{pizza.style.name}} crust:
+                       {% for topping in pizza.toppings %}
+                            {{topping.info.name}}
+                       {% endfor %}
+                  </li>
+                  <br>
+                  {{order.customer.name}} ({{order.customer.phone_number}}), {{order.customer.addresses[0].street_address}}, {{order.customer.addresses[0].city}} {{order.customer.addresses[0].state.name}}
+                  {% endfor %}
+             </ol>
+        </li>
+        <!-- Put a button here. It should update a the display using a script.-->
