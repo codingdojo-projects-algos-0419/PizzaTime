@@ -12,9 +12,14 @@ app.add_url_rule('/staff/login', view_func=staff_login, methods=["POST"])
 app.add_url_rule('/admin/nav', view_func=admin_nav)
 app.add_url_rule('/admin/logout', view_func=admin_logout)
 app.add_url_rule('/admin/dash', view_func=admin_dash)
+
 app.add_url_rule('/admin/account', view_func=admin_acc)
-app.add_url_rule('/account/edit', view_func=admin_edit)
-app.add_url_rule('/account/user/update', view_func=edit_user, methods=['POST'])
+app.add_url_rule('/account/<id>/edit', view_func=admin_edit)
+app.add_url_rule('/account/user/create', view_func=create_staff, methods=['POST'])
+app.add_url_rule('/account/<id>/update', view_func=edit_user, methods=['POST'])
+app.add_url_rule('/delete/<id>', view_func=delete_user)
+
+#Admin Manage Restaurant
 app.add_url_rule('/admin/create_topping', view_func=create_topping,methods=["POST"])
 app.add_url_rule('/admin/update_topping', view_func=update_topping,methods=["POST"])
 app.add_url_rule('/admin/create_size', view_func=create_size,methods=["POST"])

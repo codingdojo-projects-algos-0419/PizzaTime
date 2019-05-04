@@ -116,7 +116,8 @@ def show_custompizza():
 
 ## customer nav partial
 def nav():
-    name = session['name']
+    cust_name = Customer.query.get(session['MyWebsite_customer_id'])
+    name = cust_name.name
     return render_template('nav.html',
     name = name
     )
@@ -135,6 +136,10 @@ def add_pizza():
 def cust_account():
     customer_id=session['MyWebsite_customer_id']
     customer=Customer.get(customer_id)
+    cust_address=Address.query.get(customer_id)
+    #print('*'*90)
+    #print(cust_address)
+    #Get past orders
     order=Order.get_entering(customer.id)
     return render_template('account.html',
     customer = customer,

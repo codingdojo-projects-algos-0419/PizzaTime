@@ -1,7 +1,7 @@
 <!-- Partial for admin/staff navigation -->
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
   <div class="container">
-       <a class="navbar-brand" href="#">Black Belt Pizza</a>
+       <a class="navbar-brand" href="/admin/dash">Black Belt Pizza</a>
        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
        <span class="navbar-toggler-icon"></span>
        </button>
@@ -12,6 +12,9 @@
             <a class="nav-link" href="/admin/dash">HOME <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="/store">STORE</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="/admin/account">ACCOUNT</a>
           </li>
           <li class="nav-item">
@@ -19,8 +22,15 @@
           </li>
        </ul>
        <ul class="nav navbar-right">
-            <li><a href="#"></a><ion-icon size="large" name="logo-instagram"></ion-icon></li>
-            <li><a href="#"></a><ion-icon size="large" name="logo-twitter"></ion-icon></li>
+            <li class="nav-item">
+                 <a class="nav-link" href="/admin/account"><ion-icon name="person"></ion-icon>{{staff}}</a>
+            </li>
+            <li class="nav-item">
+                 <a href="#"></a><ion-icon size="large" name="logo-instagram"></ion-icon>
+            </li>
+            <li class="nav-item">
+                 <a href="#"></a><ion-icon size="large" name="logo-twitter"></ion-icon>
+            </li>
        </ul>
        </div>
   </div>
