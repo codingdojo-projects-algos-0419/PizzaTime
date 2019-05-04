@@ -139,13 +139,14 @@ class Staff(db.Model):
                     print("admin login_success")
                     result=True
         return result
-#
 
     @classmethod
     def edit_user(cls,form):
-        acc_update = Staff.query.get(session[''])
-        cust_update.name = form['name']
-        cust_update.email = form['email']
-        cust_update.phone_number = form['phone']
+        staff_update = Staff.query.get(session['usr_id'])
+        staff_update.first_name = form['first_name']
+        staff_update.last_name = form['last_name']
+        staff_update.username = form['username']
+        staff_update.email = form['email']
+        staff_update.user_level = form['user_level']
         db.session.commit()
-        return cust_update.name
+        return staff_update.first_name

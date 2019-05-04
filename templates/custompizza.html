@@ -31,13 +31,23 @@
                                 {% for pizza in order.pizzas %}
                                 <tr>
                                      <td>{{pizza.qty}}</td>
+                                     <!-- <td><input type="number" name="qty" value="{{pizza.qty}}"></td> -->
+
                                      <td>{{pizza.size.name}}</td>
+                                     <!-- <td><input type="text" name="pizza_size" value="{{pizza.size.name}}"></td> -->
+
                                      <td>{{pizza.style.name}}</td>
+                                     <!-- <td><input type="text" name="pizza_style" value="{{pizza.style.name}}"></td> -->
+
                                      <td>{% for topping in pizza.toppings %} {{topping.info.name}}
                                      {% endfor %}</td>
                                      <td>
-                                          <a href="#">remove</a>
+                                          <a href="#">edit</a>
                                      </td>
+                                     <!-- <td>
+                                          <a href="#">update</a>
+                                          <a href="#">remove</a>
+                                     </td> -->
                                 {% endfor%}
                                 </tr>
                            </tbody>

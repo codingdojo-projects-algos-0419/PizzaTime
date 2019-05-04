@@ -7,10 +7,6 @@ from staff_model import Staff
 def admin():
     return render_template('admin.html')
 
-## render staff dashboard
-#def staff():
-#    return  render_template('staff.html')
-
 def staff_login():
     # print(' staff_login '*20)
     employee=Staff.validate_login(request.form)
@@ -20,7 +16,7 @@ def staff_login():
         session['user_name']=employee.first_name+' '+employee.last_name
         session['login_session']=Staff.get_session_key(employee.id)
         if employee.user_level<6:
-            return redirect('/staff/dash')
+            return redirect('/store')
         if employee.user_level>=6:
             return redirect('/admin/dash')
     return redirect('/admin')
@@ -85,17 +81,39 @@ def update_order_type():
 
 #admin account controller
 def admin_acc():
-    return render_template('adaccount.html')
+    cur_staff=Staff.get_all()
+    print(cur_staff)
+    return render_template('adaccount.html', staff=cur_staff)
+
+def create_staff():
+    new_staff=Staff.new(request.form)
+    return redirect('/admin/account')
 
 #edit account
-def admin_edit():
-    return render_template('accedit.html')
+def admin_edit(id):
+    get_staff=Staff.get(id)
+    print(get_staff)
+    return render_template('accedit.html',
+    staff=get_staff)
 
-def edit_user():
-    return redirect('/adaccount')
+def edit_user(id):
+    staff_update = Staff.query.get(id)
+    session['usr_id'] = staff_update.id
+    print(staff_update.id)
+    staff_update.edit_user(request.form)
+    return redirect('/admin/account')
+
+def delete_user(id):
+    staff_delete = Staff.query.get(id)
+    #session['usr_id'] = staff_delete.id
+    db.session.delete(staff_delete)
+    db.session.commit()
+    return redirect('/admin/account')
+
 ## admin nav partial
 def admin_nav():
-    return render_template('adminnav.html')
+    staff_name = session['user_name']
+    return render_template('adminnav.html', staff = staff_name)
 
 ### Logout routes
 def admin_logout():
@@ -105,7 +123,7 @@ def admin_logout():
 ## render kitchen orders dashboard
 def store():
     orders=Order.get_entered()
-    return  render_template('restdash.html',orders=orders)
+    return  render_template('restdash.html', orders=orders)
 
 def store_logout():
     session.clear()
