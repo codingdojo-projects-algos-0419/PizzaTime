@@ -29,6 +29,7 @@ class Order(db.Model):
         db.session.commit()
     def ship_it(self):
         self.status=StatusEnum.ready
+        db.session.commit()
     def total(self):
         total=0.0
         for pizza in self.pizzas:
@@ -55,7 +56,8 @@ class Order(db.Model):
         db.session.commit()
     @classmethod
     def get_entered(cls):
-        orders=cls.query.filter(or_(cls.status==StatusEnum.entered,cls.status==StatusEnum.ready)).all()
+        # orders=cls.query.filter(or_(cls.status==StatusEnum.entered,cls.status==StatusEnum.ready)).all()
+        orders=cls.query.filter(cls.status==StatusEnum.entered).all()
         return orders
     @classmethod
     def get_ready(cls):

@@ -18,7 +18,38 @@
                     socket.on('neworder', function(msg) {
                          console.log("Received order" + msg);
                          $("#current_orders").append(msg);
+                         add_timers();
                     });
+                    function add_timers(){
+                         var order_count=$(".order_timer").length;
+                         var t_d=[];
+                         $("#order_title").text("CURRENT ORDERS: "+order_count);
+                         $(".order_timer").each(function(i){
+                              t_d[i]=new IntervalTimer;
+                              t_d[i].start_time=Date.parse($(this).attr("ordered_at"));
+                              console.log(t_d[i].start_time);
+                              //$(this).text(t_d[i]);
+                              var timer_display=this;
+                              t_d[i].on_event=function(){
+                                   //$("#order_title").text(this.time())
+                                   //$(timer_display).text(this.time())
+                                   $(timer_display).text(this.time_string())
+                              }
+                              t_d[i].start();
+                         });
+                    }
+                    $("#current_orders").on("click",".order_ready_btn",function(event){
+                         var parent=$(this).parent();
+                         //tell the server that the order is ready
+                         socket.emit('order_ready', {order_id: $(parent).attr("order_id")});
+                         $(this).parent().slideUp("400",function(){
+                              $(parent).remove();
+                              //update order_title
+                              $("#order_title").text("CURRENT ORDERS: "+$(".customer_order").length);
+                         });
+                         event.stopPropagation();
+                    })
+                    add_timers();
                })
           </script>
      </head>
@@ -35,8 +66,9 @@
                     <ul class="list-unstyled" id="current_orders">
                     {% for order in orders: %}
                          <li class="section my-3 customer_order" order_id="{{order.id}}">
-                         <p class="order_timer" ordered_at="{{order.updated_at}} GMT"></p>
-                         {{order.id}}: {{order.order_type.name}} <br>
+                              <p class="order_timer" ordered_at="{{order.updated_at}} GMT"></p>
+                              Order #{{order.id}} ({{order.order_type.name}}):
+                              {{order.customer.name}} ({{order.customer.phone_number}}), {{order.customer.addresses[0].street_address}}, {{order.customer.addresses[0].city}} {{order.customer.addresses[0].state.name}}
                               <ol>
                                    {% for pizza in order.pizzas %}
                                    <li>Qty {{pizza.qty}}, Size {{pizza.size.name}}, {{pizza.style.name}} crust:
@@ -44,35 +76,15 @@
                                              {{topping.info.name}}
                                         {% endfor %}
                                    </li>
-                                   <br>
-                                   {{order.customer.name}} ({{order.customer.phone_number}}), {{order.customer.addresses[0].street_address}}, {{order.customer.addresses[0].city}} {{order.customer.addresses[0].state.name}}
                                    {% endfor %}
                               </ol>
+                              <!-- Put a button here. It should update a the display using a script.-->
+                              <button class="order_ready_btn btn-primary">Order Up!</button>
                          </li>
-                         <!-- Put a button here. It should update a the display using a script.-->
                     {% endfor %}
                     </ul>
                </div>
           </div>
           <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
      </body>
-     <script>
-               var order_count=$(".order_timer").length;
-               var t_d=[];
-               $("#order_title").text("CURRENT ORDERS: "+order_count);
-               $(".order_timer").each(function(i){
-                    t_d[i]=new IntervalTimer;
-                    t_d[i].start_time=Date.parse($(this).attr("ordered_at"));
-                    console.log(t_d[i].start_time);
-                    //$(this).text(t_d[i]);
-                    var timer_display=this;
-                    t_d[i].on_event=function(){
-                         //$("#order_title").text(this.time())
-                         //$(timer_display).text(this.time())
-                         $(timer_display).text(this.time_string())
-                    }
-                    t_d[i].start();
-               });
-
-     </script>
 </html>

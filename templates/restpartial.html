@@ -1,15 +1,16 @@
-<li class="section my-3" order_id="{{order.id}}">
-        {{order.id}}: {{order.order_type.name}} <br>
-             <ol>
-                  {% for pizza in order.pizzas %}
-                  <li>Qty {{pizza.qty}}, Size {{pizza.size.name}}, {{pizza.style.name}} crust:
-                       {% for topping in pizza.toppings %}
-                            {{topping.info.name}}
-                       {% endfor %}
-                  </li>
-                  <br>
-                  {{order.customer.name}} ({{order.customer.phone_number}}), {{order.customer.addresses[0].street_address}}, {{order.customer.addresses[0].city}} {{order.customer.addresses[0].state.name}}
-                  {% endfor %}
-             </ol>
+<li class="section my-3 customer_order" order_id="{{order.id}}">
+    <p class="order_timer" ordered_at="{{order.updated_at}} GMT"></p>
+    Order #({{order.id}}): {{order.order_type.name}}:
+    {{order.customer.name}} ({{order.customer.phone_number}}), {{order.customer.addresses[0].street_address}}, {{order.customer.addresses[0].city}} {{order.customer.addresses[0].state.name}}
+    <ol>
+        {% for pizza in order.pizzas %}
+        <li>Qty {{pizza.qty}}, Size {{pizza.size.name}}, {{pizza.style.name}} crust:
+            {% for topping in pizza.toppings %}
+                {{topping.info.name}}
+            {% endfor %}
         </li>
-        <!-- Put a button here. It should update a the display using a script.-->
+        {% endfor %}
+    </ol>
+    <!-- Put a button here. It should update a the display using a script.-->
+    <button class="order_ready_btn btn-primary">Order Up!</button>
+</li>

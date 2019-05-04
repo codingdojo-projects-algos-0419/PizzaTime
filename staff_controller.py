@@ -130,9 +130,12 @@ def store_logout():
     session.clear()
     return redirect('/staff')
 
-@socketio.on('my event')                          # Decorator to catch an event called "my event":
-def test_message(message):                        # test_message() is the event callback function.
-    emit('my response', {'data': 'got it!'})  
+@socketio.on('order_ready', namespace='/restdash')                          # Decorator to catch an event called "my event":
+def handle_order_ready(message):                        # test_message() is the event callback function.
+    # print("Order Ready: ",message)
+    order=Order.query.get(message['order_id'])
+    # print(order.id)
+    order.ship_it()
 
 @socketio.on('connect', namespace='/restdash')
 def restdash_connect():
