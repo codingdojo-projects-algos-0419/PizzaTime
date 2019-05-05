@@ -29,7 +29,7 @@ stripe_keys = {
 f.close()
 stripe.api_key = stripe_keys['secret_key']
 
-#print("Public key",stripe_keys['publishable_key'])
-#print("Secret key",stripe_keys['secret_key'])
+print("Public key: '"+stripe_keys['publishable_key']+"'")
+print("Secret key: '"+stripe_keys['secret_key']+"'")
 
 socketio = SocketIO(app)

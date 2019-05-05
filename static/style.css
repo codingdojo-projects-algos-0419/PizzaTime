@@ -44,3 +44,8 @@ hr {
 .nav-item a:link, a:visited {
      color:#fff;
 }
+
+.topping_name{
+     display:inline-block;
+     width: 200px;
+}

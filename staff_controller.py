@@ -63,7 +63,7 @@ def update_style():
 
 def create_size():
     print(request.form)
-    new_size=Size.new(request.form['name'],request.form['description'],request.form['price'])
+    new_size=Size.new(request.form['name'],request.form['description'],request.form['price'],request.form['scaling'])
     return redirect('/admin/dash')
 
 def update_size():
