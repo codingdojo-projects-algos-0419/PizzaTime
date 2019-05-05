@@ -1,4 +1,4 @@
-### ORM models for Orders, Pizza, and related db ### 
+### ORM models for Orders, Pizza, and related db ###
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy.sql import func, and_,or_
@@ -67,6 +67,10 @@ class Order(db.Model):
     def get_entering(cls,customer_id):
         order=cls.query.filter(cls.customer_id==customer_id).filter(cls.status==StatusEnum.entering).first()
         return order
+#
+    @classmethod
+    def get_completed(cls,customer_id):
+        orders=cls.query.filter(cls.customer_id==customer_id).filter(cls.status==StatusEnum.completed).all()
 
 class OrderType(db.Model):
     # This will probably just be "pickup" or "delivery":  The table will likely only contain these two records.
