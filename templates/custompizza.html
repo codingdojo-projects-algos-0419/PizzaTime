@@ -17,6 +17,17 @@
                {% endfor %}
                placeholder:0
           };
+          var scaling_size={
+               {% for size in sizes %}
+                    {% if size.scaling %}
+               {{size.id}}:{{size.scaling}},
+                    {% else %}
+               {{size.id}}:1,
+                    {% endif %}
+               {% endfor %}
+               placeholder:0
+          }
+
           var price_style={
                {% for style in styles %}
                {{style.id}}:{{style.price}},
@@ -29,8 +40,20 @@
                {% endfor %}
                placeholder:0
           };
+          calc_preview_price();
           //$("#pizza_config").on("change","[name='size']",function(){
           $("#pizza_config").children().change(function(){
+               if ($(this).attr("name")=="size"){
+                    //update topping prices
+                    var scaling=scaling_size[$("[name='size']").val()]
+                    $(".topping_price").each(function(i){
+                         //console.log($(this).attr("topping_id"));
+                         //console.log(price_topping[$(this).attr("topping_id")]);
+                         //console.log(scaling);
+                         let price=price_topping[$(this).attr("topping_id")]*scaling;
+                         $(this).text("$"+price.toFixed(2));
+                    })
+               }
                let preview_price=(price_size[$("[name='size']").val()]+ price_style[$("[name='style']").val()]);
                $("[name='topping']").each(function(i){
                     if ($(this).prop("checked")){
@@ -39,8 +62,28 @@
                     }
                })
                console.log(preview_price);
-               $("#preview_price").text("$"+preview_price+" ea");
+               $("#preview_price").text("$"+preview_price.toFixed(2)+" ea");
           });
+
+          //just calling this on load.  Could be cleaned up to avoid duplicate code
+          function calc_preview_price(){
+               if ($(this).attr("name")=="size"){
+                    var scaling=scaling_size[$("[name='size']").val()]
+                    $(".topping_price").each(function(i){
+                         let price=price_topping[$(this).attr("topping_id")]*scaling;
+                         $(this).text("$"+price.toFixed(2));
+                    })
+               }
+               let preview_price=(price_size[$("[name='size']").val()]+ price_style[$("[name='style']").val()]);
+               $("[name='topping']").each(function(i){
+                    if ($(this).prop("checked")){
+                         //console.log($(this).val());
+                         preview_price+=price_topping[$(this).val()]
+                    }
+               })
+               console.log(preview_price);
+               $("#preview_price").text("$"+preview_price.toFixed(2)+" ea");
+          }
          });
     </script>
 </head>
@@ -119,13 +162,13 @@
                           <div>
                               {% for topping in toppings_menu %}
                               {% set topping_str=topping.name %}
-                              {% set topping_str=topping_str.ljust(30,'.') %}
+                              {# set topping_str=topping_str.ljust(30,'.') #}
                               {% set topping_price="%.2f" %topping.price %}
-                              <input type="checkbox" name="topping" value="{{topping.id}}">{{topping_str}}${{topping_price}}<br>
+                              <input type="checkbox" name="topping" value="{{topping.id}}"><span topping_id={{topping.id}}  class="topping_name">{{topping_str}}</span><span topping_id={{topping.id}} class="topping_price">${{topping_price}}</span><br>
                               {% endfor %}
                           </div>
+                          <p id="preview_price"> </p>
                           <input class="btn btn-sm btn-primary" type="submit" value="ADD TO ORDER">
-                          <p id="preview_price"></p>
                       </form>
                  </div>
             </div>
