@@ -24,6 +24,12 @@ class Order(db.Model):
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
     customer=db.relationship('Customer', foreign_keys=[customer_id],  backref=db.backref("orders",cascade="all,delete-orphan"))
     order_type=db.relationship('OrderType', foreign_keys=[order_type_id], backref=db.backref("orders",uselist=False,cascade="all, delete-orphan"))
+    def complete(self):
+        self.status=StatusEnum.completed
+        db.session.commit()
+    def reorder(self):
+        self.status=StatusEnum.entering
+        db.session.commit()
     def submit(self):
         self.status=StatusEnum.entered
         db.session.commit()
@@ -35,7 +41,10 @@ class Order(db.Model):
         for pizza in self.pizzas:
             pizza_price=(pizza.size.price+pizza.style.price)
             for topping in pizza.toppings:
-                pizza_price+=topping.info.price
+                if pizza.size.scaling:
+                    pizza_price+=topping.info.price*pizza.size.scaling
+                else:
+                    pizza_price+=topping.info.price
             total+=pizza_price*pizza.qty
         return round(total,2)
     @classmethod
@@ -109,11 +118,13 @@ class Pizza(db.Model):
     style=db.relationship('Style',foreign_keys=[style_id],backref=db.backref("pizzas"),uselist=False)
     size=db.relationship('Size',foreign_keys=[size_id],backref=db.backref("pizzas"),uselist=False)
     def price(self):
-        total=0.0
         total=(self.size.price+self.style.price)
         for topping in self.toppings:
-            total+=topping.info.price
-        total+=total*self.qty
+            if self.size.scaling:
+                total+=topping.info.price*self.size.scaling
+            else:
+                total+=topping.info.price
+        total=total*self.qty
         return round(total,2)
     @classmethod
     def new(cls,order_id,form):
@@ -139,14 +150,16 @@ class Size(db.Model):
     price=db.Column(db.Float)
     created_at = db.Column(db.DateTime, server_default=func.now())
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
+    scaling=db.Column(db.Float,default=1.0)
     def update(self,form):
         self.name=form['name']
         self.description=form['description']
         self.price=form['price']
+        self.scaling=form['scaling']
         db.session.commit()
     @classmethod
-    def new(cls,name,description,price):
-        new_record=cls(name=name,description=description,price=price)
+    def new(cls,name,description,price,scaling):
+        new_record=cls(name=name,description=description,price=price,scaling=scaling)
         db.session.add(new_record)
         db.session.commit()
         return new_record

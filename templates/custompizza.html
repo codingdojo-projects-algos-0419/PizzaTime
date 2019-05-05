@@ -9,6 +9,83 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+         $(function(){
+          var price_size={
+               {% for size in sizes %}
+               {{size.id}}:{{size.price}},
+               {% endfor %}
+               placeholder:0
+          };
+          var scaling_size={
+               {% for size in sizes %}
+                    {% if size.scaling %}
+               {{size.id}}:{{size.scaling}},
+                    {% else %}
+               {{size.id}}:1,
+                    {% endif %}
+               {% endfor %}
+               placeholder:0
+          }
+
+          var price_style={
+               {% for style in styles %}
+               {{style.id}}:{{style.price}},
+               {% endfor %}
+               placeholder:0
+          };
+          var price_topping={
+               {% for topping in toppings_menu %}
+               {{topping.id}}:{{topping.price}},
+               {% endfor %}
+               placeholder:0
+          };
+          calc_preview_price();
+          //$("#pizza_config").on("change","[name='size']",function(){
+          $("#pizza_config").children().change(function(){
+               if ($(this).attr("name")=="size"){
+                    //update topping prices
+                    var scaling=scaling_size[$("[name='size']").val()]
+                    $(".topping_price").each(function(i){
+                         //console.log($(this).attr("topping_id"));
+                         //console.log(price_topping[$(this).attr("topping_id")]);
+                         //console.log(scaling);
+                         let price=price_topping[$(this).attr("topping_id")]*scaling;
+                         $(this).text("$"+price.toFixed(2));
+                    })
+               }
+               let preview_price=(price_size[$("[name='size']").val()]+ price_style[$("[name='style']").val()]);
+               $("[name='topping']").each(function(i){
+                    if ($(this).prop("checked")){
+                         //console.log($(this).val());
+                         preview_price+=price_topping[$(this).val()]
+                    }
+               })
+               console.log(preview_price);
+               $("#preview_price").text("$"+preview_price.toFixed(2)+" ea");
+          });
+
+          //just calling this on load.  Could be cleaned up to avoid duplicate code
+          function calc_preview_price(){
+               if ($(this).attr("name")=="size"){
+                    var scaling=scaling_size[$("[name='size']").val()]
+                    $(".topping_price").each(function(i){
+                         let price=price_topping[$(this).attr("topping_id")]*scaling;
+                         $(this).text("$"+price.toFixed(2));
+                    })
+               }
+               let preview_price=(price_size[$("[name='size']").val()]+ price_style[$("[name='style']").val()]);
+               $("[name='topping']").each(function(i){
+                    if ($(this).prop("checked")){
+                         //console.log($(this).val());
+                         preview_price+=price_topping[$(this).val()]
+                    }
+               })
+               console.log(preview_price);
+               $("#preview_price").text("$"+preview_price.toFixed(2)+" ea");
+          }
+         });
+    </script>
 </head>
 <body>
     <div class="container">
@@ -24,7 +101,8 @@
                                      <th>Size</th>
                                      <th>Crust</th>
                                      <th>Toppings</th>
-                                     <th>Actions</th>
+                                     <th>Subtotal</th>
+                                     <th>Action</th>
                                 </tr>
                            </thead>
                            <tbody>
@@ -39,8 +117,14 @@
                                      <td>{{pizza.style.name}}</td>
                                      <!-- <td><input type="text" name="pizza_style" value="{{pizza.style.name}}"></td> -->
 
-                                     <td>{% for topping in pizza.toppings %} {{topping.info.name}}
-                                     {% endfor %}</td>
+                                     <td>{% for topping in pizza.toppings %}
+                                           {{topping.info.name}}
+                                         {% endfor %}
+                                     </td>
+                                     <td>
+                                          {% set pizza_price="%.2f" % pizza.price() %}
+                                          ${{pizza_price}}
+                                     </td>
                                      <td>
                                           <div class="dropdown">
                                                <button class="btn btn-link btn-sm dropdown-toggle btn-reveal" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><ion-icon name="ios-more"></ion-icon></button>
@@ -59,24 +143,24 @@
                            </tbody>
                       </table>
                       <!--  -->
-                      <p>Subtotal: $</p>
-                      <a class="btn btn-sm btn-primary"href="/checkout">Submit Order</a>
+                      {% set total_str="%.2f" % order.total() %}
+                      <p>Total: ${{total_str}}</p>
+                      <a class="btn btn-sm btn-primary" href="/checkout">Submit Order</a>
                  </div>
-                 <!-- edit button for Order summary -->
-                 <div class="col-lg-5">
-                      <form action="/add_pizza" method="POST">
+                 <div class="col-lg-4">
+                      <form id="pizza_config" action="/add_pizza" method="POST">
                           <div class="form-group">
-                              <label for="order_type">ORDER TYPE</label>
-                              <select class="form-control" name="order_type" id="">
+                               <label for="order_type">ORDER TYPE</label>
+                               <select name="order_type" id="">
                                    {% for ordertype in order_types %}
                                    <option value="{{ordertype.id}}">{{ordertype.name}}</option>
                                    {% endfor%}
-                              </select>
+                               </select>
                           </div>
                           <div class="form-row">
                                <div class="form-group col-md-4">
                                     <label for="size">SIZE</label>
-                                    <select class="form-control" name="size" id="">
+                                    <select name="size" id="">
                                         {% for size in sizes %}
                                         <option value="{{size.id}}">{{size.name}}</option>
                                         {% endfor %}
@@ -84,25 +168,26 @@
                                </div>
                                <div class="form-group col-md-4">
                                     <label for="style">CRUST</label>
-                                    <select class="form-control" name="style" id="">
+                                    <select name="style" id="">
                                         {% for style in styles %}
                                         <option value="{{style.id}}">{{style.name}}</option>
                                         {% endfor %}
                                     </select>
                                </div>
-                               <div class="form-group col-md-4">
-                                    <label for="qty">QTY</label>
-                                    <input type="number" class="form-control" name="qty" value="1">
-                               </div>
                           </div>
-                          <div class="form-group">
-                               <label for="topping">TOPPINGS</label>
-                               <div>
-                                   {% for topping in toppings_menu %}
-                                   <input type="checkbox" name="topping" value="{{topping.id}}">{{topping.name}}<br>
-                                   {% endfor %}
-                               </div>
+                          <div class="form-group col-md-4">
+                              <label for="qty">QTY</label>
+                              <input type="number" name="qty" value="1">
                           </div>
+                          <div>
+                              {% for topping in toppings_menu %}
+                              {% set topping_str=topping.name %}
+                              {# set topping_str=topping_str.ljust(30,'.') #}
+                              {% set topping_price="%.2f" %topping.price %}
+                              <input type="checkbox" name="topping" value="{{topping.id}}"><span topping_id={{topping.id}}  class="topping_name">{{topping_str}}</span><span topping_id={{topping.id}} class="topping_price">${{topping_price}}</span><br>
+                              {% endfor %}
+                          </div>
+                          <p id="preview_price"> </p>
                           <input class="btn btn-sm btn-primary" type="submit" value="ADD TO ORDER">
                       </form>
                  </div>
