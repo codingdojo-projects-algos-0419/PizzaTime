@@ -24,6 +24,12 @@ class Order(db.Model):
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
     customer=db.relationship('Customer', foreign_keys=[customer_id],  backref=db.backref("orders",cascade="all,delete-orphan"))
     order_type=db.relationship('OrderType', foreign_keys=[order_type_id], backref=db.backref("orders",uselist=False,cascade="all, delete-orphan"))
+    def complete(self):
+        self.status=StatusEnum.completed
+        db.session.commit()
+    def reorder(self):
+        self.status=StatusEnum.entering
+        db.session.commit()
     def submit(self):
         self.status=StatusEnum.entered
         db.session.commit()

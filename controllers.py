@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, session, flash
+from flask import render_template, redirect, request, session, flash,json
 from config import db, datetime #, stripe_keys
 from models import *
 from customer_model import Customer, Address, State
@@ -41,11 +41,10 @@ def charge():
     # change order status so it shows up in kitchen dashboard
     order.submit()
     # socket io sends a message to any connected browser connections 
-    # might be able to replace "order" with a render_template(partial)
     # socketio.emit('neworder',order.id, namespace='/restdash')
     socketio.emit('neworder',render_template('restpartial.html',order=order),namespace='/restdash')
     # show a response to the user.
-    return render_template('charge.html', amount=amount)
+    return render_template('charge.html', amount=amount,order=order)
 
 ### Customer controllers
 ## render index page with login and registration forms
@@ -89,9 +88,15 @@ def quick():
     name = session['name']
     userid = session['MyWebsite_customer_id']
     print(name)
+    customer=Customer.get(userid)
+    if customer.favorite_order_id:
+        favorite_order=Order.query.get(customer.favorite_order_id)
+    else:
+        favorite_order=None
     return render_template('quick.html',
     name = name,
     userid = userid,
+    order=favorite_order
     )
 
 def show_custompizza():
@@ -113,6 +118,28 @@ def show_custompizza():
     print(order.pizzas)
     return render_template('custompizza.html',sizes=sizes,styles=styles,toppings_menu=toppings_menu,order_types=order_types,order=order)
     # return render_template('custompizza.html')
+
+def reorder_favorite():
+    customer_id=session['MyWebsite_customer_id']
+    # in case the customer has an order already started, we're going to delete it and replace it.
+    order=Order.get_entering(customer_id)
+    if order:
+        Order.delete(order.id)
+    customer=Customer.get(customer_id)
+    order=Order.query.get(customer.favorite_order_id)
+    if order:
+        order.reorder()
+    return redirect('/create')
+
+def make_favorite():
+    #this to respond to AJAX call from checkout page, or charge page
+    print("Make Favorite")
+    print("Fav_Order",request.form['json'])
+    customer_id=session['MyWebsite_customer_id']
+    customer=Customer.get(customer_id)
+    py_data=json.loads(request.form['json'])
+    customer.update_favorite(py_data['order_id'])
+    return "ok"
 
 ## customer nav partial
 def nav():

@@ -19,10 +19,13 @@ class Customer(db.Model):
     note=db.Column(db.String(255))
     created_at = db.Column(db.DateTime, server_default=func.now())
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
-
+    # favorite_order_id can be null, so not sure about making it a foreign key and relationship
+    # favorite=db.relationship('Order',foreign_keys=[favorite_order_id])
     def __repr__(self):
         return '<User {}>'.format(self.name)
-
+    def update_favorite(self,favorite_order_id):
+        self.favorite_order_id=favorite_order_id
+        db.session.commit()
     def update_name(self,new_name):
         self.name=new_name
         db.session.commit()
