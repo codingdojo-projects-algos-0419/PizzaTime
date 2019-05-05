@@ -40,7 +40,7 @@ def charge():
     )
     # change order status so it shows up in kitchen dashboard
     order.submit()
-    # socket io sends a message to any connected browser connections 
+    # socket io sends a message to any connected browser connections
     # socketio.emit('neworder',order.id, namespace='/restdash')
     socketio.emit('neworder',render_template('restpartial.html',order=order),namespace='/restdash')
     # show a response to the user.
@@ -105,10 +105,11 @@ def show_custompizza():
     # print('customer id',customer_id)
     customer=Customer.get(customer_id)
     # print(customer)
-    order=Order.get_entering(customer.id)
+    order = Order.get_entering(customer.id)
     if not order:
         order=Order.new(customer_id)
-    print(order)
+        #new_pizza=Pizza.new(order.id,request.form)
+    #print(order)
     sizes=Size.get_all()
     # print(sizes)
     styles=Style.get_all()
@@ -116,7 +117,13 @@ def show_custompizza():
     # print("order types:",order_types)
     toppings_menu=ToppingMenu.get_all()
     print(order.pizzas)
-    return render_template('custompizza.html',sizes=sizes,styles=styles,toppings_menu=toppings_menu,order_types=order_types,order=order)
+    return render_template('custompizza.html',
+    sizes=sizes,
+    styles=styles,
+    toppings_menu=toppings_menu,
+    order_types=order_types,
+    order=order
+    )
     # return render_template('custompizza.html')
 
 def reorder_favorite():
@@ -164,18 +171,27 @@ def cust_account():
     customer_id=session['MyWebsite_customer_id']
     customer=Customer.get(customer_id)
     cust_address=Address.query.get(customer_id)
-    #print('*'*90)
-    #print(cust_address)
+    print('*'*90)
+    print(cust_address)
     #Get past orders
-    order=Order.get_entering(customer.id)
+    order=Order.get_completed(customer.id)
     return render_template('account.html',
     customer = customer,
-    order = order
+    order = order,
+    address = cust_address
     )
-#
+
+#update customer account
 def cust_update():
     update = Customer.edit_user(request.form)
     return redirect('/account')
+
+#delete pizza order
+def start_over(id):
+    order=Order.get_entering(id)
+    db.session.delete(order)
+    db.session.commit()
+    return redirect('/create')
 
 def logout():
     session.clear()

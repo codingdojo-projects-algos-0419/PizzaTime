@@ -90,16 +90,16 @@
 <body>
     <div class="container">
         <div id="nav"></div>
-        <div class="section d-inline-block align-top" id="order-summary">
+        <div class="section" id="order-summary">
             <div class="row">
-                 <div class="col-lg-8">
+                 <div class="col-lg-7">
                       <h2>Order Summary</h2>
                       <table class="table table-striped table-dark">
                            <thead>
                                 <tr>
                                      <th>Qty</th>
                                      <th>Size</th>
-                                     <th>Style</th>
+                                     <th>Crust</th>
                                      <th>Toppings</th>
                                      <th>Subtotal</th>
                                      <th>Action</th>
@@ -126,7 +126,13 @@
                                           ${{pizza_price}}
                                      </td>
                                      <td>
-                                          <a href="#">edit</a>
+                                          <div class="dropdown">
+                                               <button class="btn btn-link btn-sm dropdown-toggle btn-reveal" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><ion-icon name="ios-more"></ion-icon></button>
+                                               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <a class="dropdown-item" href="#">Update</a>
+                                                    <a class="dropdown-item text-danger" href="#">Remove</a>
+                                               </div>
+                                          </div>
                                      </td>
                                      <!-- <td>
                                           <a href="#">update</a>
@@ -143,6 +149,7 @@
                  </div>
                  <div class="col-lg-4">
                       <form id="pizza_config" action="/add_pizza" method="POST">
+<<<<<<< HEAD
                           <input type="number" name="qty" value="1">
                           <select name="order_type" id="">
                               {% for ordertype in order_types %}
@@ -159,6 +166,38 @@
                               <option value="{{style.id}}">{{style.name}}</option>
                               {% endfor %}
                           </select>
+=======
+                          <div class="form-group">
+                               <label for="order_type">ORDER TYPE</label>
+                               <select name="order_type" id="">
+                                   {% for ordertype in order_types %}
+                                   <option value="{{ordertype.id}}">{{ordertype.name}}</option>
+                                   {% endfor%}
+                               </select>
+                          </div>
+                          <div class="form-row">
+                               <div class="form-group col-md-4">
+                                    <label for="size">SIZE</label>
+                                    <select name="size" id="">
+                                        {% for size in sizes %}
+                                        <option value="{{size.id}}">{{size.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                               </div>
+                               <div class="form-group col-md-4">
+                                    <label for="style">CRUST</label>
+                                    <select name="style" id="">
+                                        {% for style in styles %}
+                                        <option value="{{style.id}}">{{style.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                               </div>
+                          </div>
+                          <div class="form-group col-md-4">
+                              <label for="qty">QTY</label>
+                              <input type="number" name="qty" value="1">
+                          </div>
+>>>>>>> b4cca4c4cca65b0c99b26bc5badc2558a76bcd75
                           <div>
                               {% for topping in toppings_menu %}
                               {% set topping_str=topping.name %}
@@ -172,9 +211,28 @@
                       </form>
                  </div>
             </div>
+            <div class="">
+                 <form class="" action="index.html" method="post">
+
+                      <label for="qty">QTY</label>
+                      <input type="number" class="form-control" name="qty" value="">
+
+                      <label for="size">SIZE</label>
+                      <input type="number" class="form-control" name="size" value="">
+
+                      <label for="style">CRUST</label>
+                      <input type="text" class="form-control" name="crust" value="">
+
+
+
+
+                 </form>
+            </div>
        </div>
     </div>
     <script src="https://unpkg.com/ionicons@4.5.5/dist/ionicons.js"></script>
+    <!-- add popper.min.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>

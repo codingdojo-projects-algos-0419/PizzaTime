@@ -20,6 +20,9 @@ app.add_url_rule('/add_pizza',view_func=add_pizza,methods=['POST'])
 app.add_url_rule('/checkout',view_func=show_checkout)
 app.add_url_rule('/charge',view_func=charge,methods=['POST'])
 
+## Order edits
+app.add_url_rule('/remove/<id>/order', view_func=start_over)
+
 ## customer routes
 app.add_url_rule('/quick', view_func=quick)
 app.add_url_rule('/account', view_func=cust_account)

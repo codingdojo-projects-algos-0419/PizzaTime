@@ -20,8 +20,11 @@ app.secret_key="secret#key#is#set"
 bcrypt = Bcrypt(app)
 
 # Stripe API #
-# Strip API keys go in a folder above called StripeAPIkeys.txt
-f = open("..\StripeAPIkeys.txt", "r")
+#Strip API keys go in a folder above called StripeAPIkeys.txt
+#open path for Unix
+f = open("../stripe/StripeAPIkeys.txt", "r")
+#open path for Windows
+#f = open("..\StripeAPIkeys.txt", "r")
 stripe_keys = {
 'publishable_key':f.readline().strip('\n').strip('\r'),
 'secret_key': f.readline().strip('\n').strip('\r')
@@ -29,7 +32,7 @@ stripe_keys = {
 f.close()
 stripe.api_key = stripe_keys['secret_key']
 
-print("Public key: '"+stripe_keys['publishable_key']+"'")
-print("Secret key: '"+stripe_keys['secret_key']+"'")
+print("Public key: ",stripe_keys['publishable_key'])
+print("Secret key: ",stripe_keys['secret_key'])
 
 socketio = SocketIO(app)
