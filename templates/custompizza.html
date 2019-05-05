@@ -9,6 +9,40 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+         $(function(){
+          var price_size={
+               {% for size in sizes %}
+               {{size.id}}:{{size.price}},
+               {% endfor %}
+               placeholder:0
+          };
+          var price_style={
+               {% for style in styles %}
+               {{style.id}}:{{style.price}},
+               {% endfor %}
+               placeholder:0
+          };
+          var price_topping={
+               {% for topping in toppings_menu %}
+               {{topping.id}}:{{topping.price}},
+               {% endfor %}
+               placeholder:0
+          };
+          //$("#pizza_config").on("change","[name='size']",function(){
+          $("#pizza_config").children().change(function(){
+               let preview_price=(price_size[$("[name='size']").val()]+ price_style[$("[name='style']").val()]);
+               $("[name='topping']").each(function(i){
+                    if ($(this).prop("checked")){
+                         //console.log($(this).val());
+                         preview_price+=price_topping[$(this).val()]
+                    }
+               })
+               console.log(preview_price);
+               $("#preview_price").text("$"+preview_price+" ea");
+          });
+         });
+    </script>
 </head>
 <body>
     <div class="container">
@@ -24,6 +58,7 @@
                                      <th>Size</th>
                                      <th>Style</th>
                                      <th>Toppings</th>
+                                     <th>Subtotal</th>
                                      <th>Action</th>
                                 </tr>
                            </thead>
@@ -39,8 +74,14 @@
                                      <td>{{pizza.style.name}}</td>
                                      <!-- <td><input type="text" name="pizza_style" value="{{pizza.style.name}}"></td> -->
 
-                                     <td>{% for topping in pizza.toppings %} {{topping.info.name}}
-                                     {% endfor %}</td>
+                                     <td>{% for topping in pizza.toppings %}
+                                           {{topping.info.name}}
+                                         {% endfor %}
+                                     </td>
+                                     <td>
+                                          {% set pizza_price="%.2f" % pizza.price() %}
+                                          ${{pizza_price}}
+                                     </td>
                                      <td>
                                           <a href="#">edit</a>
                                      </td>
@@ -53,11 +94,12 @@
                            </tbody>
                       </table>
                       <!--  -->
-                      <p>Subtotal: $</p>
-                      <a class="btn btn-sm btn-primary"href="/checkout">Submit Order</a>
+                      {% set total_str="%.2f" % order.total() %}
+                      <p>Total: ${{total_str}}</p>
+                      <a class="btn btn-sm btn-primary" href="/checkout">Submit Order</a>
                  </div>
                  <div class="col-lg-4">
-                      <form action="/add_pizza" method="POST">
+                      <form id="pizza_config" action="/add_pizza" method="POST">
                           <input type="number" name="qty" value="1">
                           <select name="order_type" id="">
                               {% for ordertype in order_types %}
@@ -76,10 +118,14 @@
                           </select>
                           <div>
                               {% for topping in toppings_menu %}
-                              <input type="checkbox" name="topping" value="{{topping.id}}">{{topping.name}}<br>
+                              {% set topping_str=topping.name %}
+                              {% set topping_str=topping_str.ljust(30,'.') %}
+                              {% set topping_price="%.2f" %topping.price %}
+                              <input type="checkbox" name="topping" value="{{topping.id}}">{{topping_str}}${{topping_price}}<br>
                               {% endfor %}
                           </div>
                           <input class="btn btn-sm btn-primary" type="submit" value="ADD TO ORDER">
+                          <p id="preview_price"></p>
                       </form>
                  </div>
             </div>

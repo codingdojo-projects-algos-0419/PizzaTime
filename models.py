@@ -111,11 +111,10 @@ class Pizza(db.Model):
     style=db.relationship('Style',foreign_keys=[style_id],backref=db.backref("pizzas"),uselist=False)
     size=db.relationship('Size',foreign_keys=[size_id],backref=db.backref("pizzas"),uselist=False)
     def price(self):
-        total=0.0
         total=(self.size.price+self.style.price)
         for topping in self.toppings:
             total+=topping.info.price
-        total+=total*self.qty
+        total=total*self.qty
         return round(total,2)
     @classmethod
     def new(cls,order_id,form):
