@@ -249,11 +249,7 @@
                               {% set topping_str=topping.name %}
                               {# set topping_str=topping_str.ljust(30,'.') #}
                               {% set topping_price="%.2f" %topping.price %}
-<<<<<<< HEAD
                               <input type="checkbox" name="topping" value="{{topping.id}}" title="{{topping.description}}"><span topping_id={{topping.id}}  class="topping_name" title="{{topping.description}}">{{topping_str}}</span><span topping_id={{topping.id}} class="topping_price">${{topping_price}}</span><br>
-=======
-                              <input type="checkbox" name="topping" value="{{topping.id}}"> <span topping_id={{topping.id}}  class="topping_name">{{topping_str}}</span><span topping_id={{topping.id}} class="topping_price"> ${{topping_price}}</span><br>
->>>>>>> 60a0272e2b246f240c3c92e7ec39f700cdbab030
                               {% endfor %}
                           </div>
                           <p id="preview_price"> </p>

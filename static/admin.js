@@ -38,7 +38,7 @@ $(document).ready(function() {
         var arr = {}
         tb_row.find('.rowData').each(function(index, val){
              var col_name = $(this).attr('col');
-             var col_val = $(this).html():
+             var col_val = $(this).html();
              arr[col_name]=col_val; 
         })
 

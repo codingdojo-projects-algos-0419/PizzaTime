@@ -26,7 +26,7 @@ def staff_login():
 def admin_dash():
     if not 'employee_id' in session.keys():
         return redirect('/admin')
-    if not Staff.is_logged_in_as_admin:
+    if not Staff.is_logged_in_as_admin(session['employee_id'],session['login_session']):
         return redirect('/')
     topping_menu=ToppingMenu.get_all()
     sizes=Size.get_all()
@@ -35,6 +35,10 @@ def admin_dash():
     return render_template('admindash.html',topping_menu=topping_menu,sizes=sizes,styles=styles, order_types=order_types)
 
 def create_topping():
+    if not 'employee_id' in session.keys():
+        return redirect('/admin')
+    if not Staff.is_logged_in_as_admin(session['employee_id'],session['login_session']):
+        return redirect('/')
     print(request.form)
     new_topping=ToppingMenu.new(request.form['top_name'],request.form['description'],request.form['price'])
     # maybe change to Ajax partial:
@@ -46,16 +50,28 @@ def get_topping(id):
     return render_template('top.html', topping = topping)
 
 def update_topping(id):
+    if not 'employee_id' in session.keys():
+        return redirect('/admin')
+    if not Staff.is_logged_in_as_admin(session['employee_id'],session['login_session']):
+        return redirect('/')
     print(request.form)
     topping=ToppingMenu.query.get(id)
     topping.update(request.form)
     return redirect('/admin/dash')
 
 def update_topping_availability():
+    if not 'employee_id' in session.keys():
+        return redirect('/admin')
+    if not Staff.is_logged_in_as_admin(session['employee_id'],session['login_session']):
+        return redirect('/')
     print(request.form)
     return Topping.set_availability(request.form['topping_id'],request.form['availability'])
 
 def create_style():
+    if not 'employee_id' in session.keys():
+        return redirect('/admin')
+    if not Staff.is_logged_in_as_admin(session['employee_id'],session['login_session']):
+        return redirect('/')
     print(request.form)
     new_style=Style.new(request.form['name'],request.form['description'],request.form['price'])
     return redirect('/admin/dash')
@@ -65,11 +81,19 @@ def get_style(id):
     return render_template('style.html', style = style)
 
 def update_style(id):
+    if not 'employee_id' in session.keys():
+        return redirect('/admin')
+    if not Staff.is_logged_in_as_admin(session['employee_id'],session['login_session']):
+        return redirect('/')
     style=Style.query.get(id)
     style.update(request.form)
     return redirect('/admin/dash')
 
 def create_size():
+    if not 'employee_id' in session.keys():
+        return redirect('/admin')
+    if not Staff.is_logged_in_as_admin(session['employee_id'],session['login_session']):
+        return redirect('/')
     print(request.form)
     new_size=Size.new(request.form['name'],request.form['description'],request.form['price'],request.form['scaling'])
     return redirect('/admin/dash')
@@ -79,11 +103,19 @@ def get_size(id):
     return render_template('size.html', size = size)
 
 def update_size(id):
+    if not 'employee_id' in session.keys():
+        return redirect('/admin')
+    if not Staff.is_logged_in_as_admin(session['employee_id'],session['login_session']):
+        return redirect('/')
     size=Size.query.get(id)
     size.update(request.form)
     return redirect('/admin/dash')
 
 def create_order_type():
+    if not 'employee_id' in session.keys():
+        return redirect('/admin')
+    if not Staff.is_logged_in_as_admin(session['employee_id'],session['login_session']):
+        return redirect('/')
     order_type=OrderType.new(request.form['name'])
     return redirect('/admin/dash')
 
@@ -92,28 +124,48 @@ def get_order_type(id):
     return render_template('type.html')
 
 def update_order_type(id):
+    if not 'employee_id' in session.keys():
+        return redirect('/admin')
+    if not Staff.is_logged_in_as_admin(session['employee_id'],session['login_session']):
+        return redirect('/')
     order_type=OrderType.query.get(id)
     order_type.update(request.form['name'])
     return redirect('/admin/dash')
 
 #admin account controller
 def admin_acc():
+    if not 'employee_id' in session.keys():
+        return redirect('/admin')
+    if not Staff.is_logged_in_as_admin(session['employee_id'],session['login_session']):
+        return redirect('/')
     cur_staff=Staff.get_all()
     print(cur_staff)
     return render_template('adaccount.html', staff=cur_staff)
 
 def create_staff():
+    if not 'employee_id' in session.keys():
+        return redirect('/admin')
+    if not Staff.is_logged_in_as_admin(session['employee_id'],session['login_session']):
+        return redirect('/')
     new_staff=Staff.new(request.form)
     return redirect('/admin/account')
 
 #edit account
 def admin_edit(id):
+    if not 'employee_id' in session.keys():
+        return redirect('/admin')
+    if not Staff.is_logged_in_as_admin(session['employee_id'],session['login_session']):
+        return redirect('/')
     get_staff=Staff.get(id)
     print(get_staff)
     return render_template('accedit.html',
     staff=get_staff)
 
 def edit_user(id):
+    if not 'employee_id' in session.keys():
+        return redirect('/admin')
+    if not Staff.is_logged_in_as_admin(session['employee_id'],session['login_session']):
+        return redirect('/')
     staff_update = Staff.query.get(id)
     session['usr_id'] = staff_update.id
     print(staff_update.id)
@@ -121,6 +173,10 @@ def edit_user(id):
     return redirect('/admin/account')
 
 def delete_user(id):
+    if not 'employee_id' in session.keys():
+        return redirect('/admin')
+    if not Staff.is_logged_in_as_admin(session['employee_id'],session['login_session']):
+        return redirect('/')
     staff_delete = Staff.query.get(id)
     #session['usr_id'] = staff_delete.id
     db.session.delete(staff_delete)
@@ -139,6 +195,10 @@ def admin_logout():
 
 ## render kitchen orders dashboard
 def store():
+    if not 'employee_id' in session.keys():
+        return redirect('/admin')
+    if not Staff.is_logged_in(session['employee_id'],session['login_session']):
+        return redirect('/')
     orders=Order.get_entered()
     return  render_template('restdash.html', orders=orders)
 

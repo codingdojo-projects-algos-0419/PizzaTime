@@ -132,10 +132,11 @@ class Staff(db.Model):
     @classmethod
     def is_logged_in_as_admin(cls,admin_id,login_session):
         user=cls.query.get(admin_id)
+        print("employee id",admin_id)
         result=False
         if user:
             if bcrypt.check_password_hash(login_session,str(user.created_at)):
-                if user.user_level==9:
+                if user.user_level>=6:
                     print("admin login_success")
                     result=True
         return result
