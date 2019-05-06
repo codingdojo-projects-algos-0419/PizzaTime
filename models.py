@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from sqlalchemy.sql import func, and_,or_
 from config import *
 import enum
+import random
 
 class StatusEnum(enum.Enum):
     # enum to track the current status of an order
@@ -146,6 +147,19 @@ class Pizza(db.Model):
         db.session.commit()
         topping_ids=request.form.getlist('topping')
         for topping_id in topping_ids:
+            print("topping: ",topping_id)
+            topping=Topping.new(new_pizza.id,topping_id)
+        return new_pizza
+    @classmethod
+    def random(cls,order_id):
+        size_id=random.randint(1,Size.query.count())
+        style_id=random.randint(1,Style.query.count())
+        qty="1"
+        new_pizza=cls(order_id=order_id,size_id=size_id,style_id=style_id,qty=qty)
+        db.session.add(new_pizza)
+        db.session.commit()
+        for i in range(1,random.randint(1,4)):
+            topping_id=random.randint(1,ToppingMenu.query.count())
             print("topping: ",topping_id)
             topping=Topping.new(new_pizza.id,topping_id)
         return new_pizza

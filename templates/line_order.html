@@ -17,17 +17,6 @@
              ${{pizza_price}}
         </td>
         <td>
-             <div class="dropdown">
-                  <button class="btn btn-link btn-sm dropdown-toggle btn-reveal" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><ion-icon name="ios-more"></ion-icon></button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                       <a class="dropdown-item" href="#">Update</a>
-                       <!-- <a class="dropdown-item text-danger" pizza_id="{{pizza.id}}" href="#">Remove</a> -->
-                       <button class="remove_pizza dropdown-item text-danger" pizza_id="{{pizza.id}}">Remove</button>
-                  </div>
-             </div>
+            <button class="remove_pizza btn btn-sm btn-danger" pizza_id="{{pizza.id}}">Remove</button>
         </td>
-        <!-- <td>
-             <a href="#">update</a>
-             <a href="#">remove</a>
-        </td> -->
  </tr>

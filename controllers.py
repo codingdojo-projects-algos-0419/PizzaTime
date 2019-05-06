@@ -171,6 +171,15 @@ def add_pizza():
     # return redirect('/create')
     return render_template('line_order.html',pizza=new_pizza)
 
+def random_pizza():
+    customer_id=session['MyWebsite_customer_id']
+    customer=Customer.get(customer_id)
+    order=Order.get_entering(customer.id)
+    if not order:
+        order=Order.new(customer_id)
+    new_pizza=Pizza.random(order.id)
+    return redirect('/create')
+
 #render account page
 def cust_account():
     customer_id=session['MyWebsite_customer_id']

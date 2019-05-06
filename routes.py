@@ -16,6 +16,7 @@ app.add_url_rule('/user/do_registration', view_func=do_registration,methods=['PO
 app.add_url_rule('/nav', view_func=nav)
 app.add_url_rule('/logout', view_func=logout)
 app.add_url_rule('/create',view_func=show_custompizza)
+app.add_url_rule('/random',view_func=random_pizza)
 app.add_url_rule('/add_pizza',view_func=add_pizza,methods=['POST'])
 app.add_url_rule('/checkout',view_func=show_checkout)
 app.add_url_rule('/charge',view_func=charge,methods=['POST'])
