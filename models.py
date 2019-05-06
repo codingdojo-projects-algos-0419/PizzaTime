@@ -87,7 +87,7 @@ class Order(db.Model):
         return order
     @classmethod
     def get_completed(cls,customer_id):
-        orders=cls.query.filter(cls.customer_id==customer_id).filter(cls.status==StatusEnum.completed).all()
+        orders=cls.query.filter(cls.customer_id==customer_id).filter(or_(cls.status==StatusEnum.ready,cls.status==StatusEnum.completed)).all()
         return orders
 
 class OrderType(db.Model):

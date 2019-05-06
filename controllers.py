@@ -184,14 +184,15 @@ def random_pizza():
 def cust_account():
     customer_id=session['MyWebsite_customer_id']
     customer=Customer.get(customer_id)
-    cust_address=customer.address[0]
+    cust_address=customer.addresses[0]
     print('*'*90)
-    print(cust_address)
+    print(customer_id)
     #Get past orders
-    order=Order.get_completed(customer.id)
+    orders=Order.get_completed(customer.id)
+    print("Account Orders",orders)
     return render_template('account.html',
     customer = customer,
-    order = order,
+    orders = orders,
     address = cust_address
     )
 
