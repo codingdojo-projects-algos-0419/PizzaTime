@@ -201,6 +201,8 @@ def cust_update():
     update = Customer.edit_user(request.form)
     return redirect('/account')
 
+#delete a single pizza
+
 #delete pizza order
 def start_over(id):
     order=Order.get_entering(id)

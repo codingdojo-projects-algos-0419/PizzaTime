@@ -110,7 +110,7 @@
                          }).done(function(resp){
                               $("#order_total").text("Total: $"+resp);
                          });
-                    });                    
+                    });
                     $("[tr_pizza_id="+pizza_id+"]").remove();
                });
 
@@ -215,7 +215,7 @@
                       <form id="pizza_config" action="/add_pizza" method="POST">
                           <div class="form-group">
                                <label for="order_type">ORDER TYPE</label>
-                               <select name="order_type" id="">
+                               <select class="form-control" name="order_type" id="">
                                    {% for ordertype in order_types %}
                                    <option value="{{ordertype.id}}">{{ordertype.name}}</option>
                                    {% endfor%}
@@ -224,7 +224,7 @@
                           <div class="form-row">
                                <div class="form-group col-md-4">
                                     <label for="size">SIZE</label>
-                                    <select name="size" id="">
+                                    <select class="form-control" name="size" id="">
                                         {% for size in sizes %}
                                         <option value="{{size.id}}">{{size.name}}</option>
                                         {% endfor %}
@@ -232,23 +232,28 @@
                                </div>
                                <div class="form-group col-md-4">
                                     <label for="style">CRUST</label>
-                                    <select name="style" id="">
+                                    <select class="form-control" name="style" id="">
                                         {% for style in styles %}
                                         <option value="{{style.id}}" title="{{style.description}}">{{style.name}}</option>
                                         {% endfor %}
                                     </select>
                                </div>
+                               <div class="form-group col-md-4">
+                                   <label for="qty">QTY</label>
+                                   <input class="form-control" type="number" name="qty" value="1">
+                               </div>
                           </div>
-                          <div class="form-group col-md-4">
-                              <label for="qty">QTY</label>
-                              <input type="number" name="qty" value="1">
-                          </div>
+
                           <div>
                               {% for topping in toppings_menu %}
                               {% set topping_str=topping.name %}
                               {# set topping_str=topping_str.ljust(30,'.') #}
                               {% set topping_price="%.2f" %topping.price %}
+<<<<<<< HEAD
                               <input type="checkbox" name="topping" value="{{topping.id}}" title="{{topping.description}}"><span topping_id={{topping.id}}  class="topping_name" title="{{topping.description}}">{{topping_str}}</span><span topping_id={{topping.id}} class="topping_price">${{topping_price}}</span><br>
+=======
+                              <input type="checkbox" name="topping" value="{{topping.id}}"> <span topping_id={{topping.id}}  class="topping_name">{{topping_str}}</span><span topping_id={{topping.id}} class="topping_price"> ${{topping_price}}</span><br>
+>>>>>>> 60a0272e2b246f240c3c92e7ec39f700cdbab030
                               {% endfor %}
                           </div>
                           <p id="preview_price"> </p>
@@ -256,7 +261,6 @@
                       </form>
                  </div>
             </div>
-            
        </div>
     </div>
     <script src="https://unpkg.com/ionicons@4.5.5/dist/ionicons.js"></script>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+     <head>
+          <meta charset="utf-8">
+          <meta name="Pizza TIme" content="An intuitive food ordering app.">
+          <title>Black Belt Pizza | Store Login</title>
+          <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+          <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+          <script src="{{ url_for('static', filename='admin.js') }}"></script>
+     </head>
+     <body>
+          <div class="container">
+               <!-- Admin/Staff Login page for Pizza Time  -->
+               <div class="header">
+                    <div id="aNav"></div>
+               </div>
+               <div class="section">
+                    <div class="col-4">
+                         <h3 class="h4">EDIT TOPPING</h3>
+                         <form class="" action="/admin/{{topping.id}}/update_topping" method="post">
+                             <div class="form-group">
+                                  <label for="top_name">Name</label>
+                                  <input type="text" class="form-control" name="name" value="{{topping.name}}">
+                             </div>
+                             <div class="form-group">
+                                  <label for="description">Description</label>
+                                  <textarea class="form-control" name="description" rows="4" cols="40">{{topping.description}}</textarea>
+                             </div>
+
+                             <div class="form-group">
+                                  <label for="price">Price</label>
+                                  <input type="text" class="form-control" name="price" value="{{topping.price}}">
+                             </div>
+                             <input type="submit" class="btn btn-sm btn-success" value="UPDATE">
+                         </form>
+                    </div>
+               </div>
+          </div>
+          <script src="https://unpkg.com/ionicons@4.5.5/dist/ionicons.js"></script>
+          <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+     </body>
+</html>

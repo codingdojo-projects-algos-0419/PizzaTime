@@ -20,14 +20,22 @@ app.add_url_rule('/account/<id>/update', view_func=edit_user, methods=['POST'])
 app.add_url_rule('/delete/<id>', view_func=delete_user)
 
 #Admin Manage Restaurant
+#toppings
 app.add_url_rule('/admin/create_topping', view_func=create_topping,methods=["POST"])
-app.add_url_rule('/admin/update_topping', view_func=update_topping,methods=["POST"])
+app.add_url_rule('/update/<id>/top', view_func=get_topping)
+app.add_url_rule('/admin/<id>/update_topping', view_func=update_topping,methods=["POST"])
+#Size
 app.add_url_rule('/admin/create_size', view_func=create_size,methods=["POST"])
-app.add_url_rule('/admin/update_size', view_func=update_size,methods=["POST"])
+app.add_url_rule('/update/<id>/size', view_func=get_size)
+app.add_url_rule('/admin/<id>/update_size', view_func=update_size,methods=["POST"])
+#style
 app.add_url_rule('/admin/create_style', view_func=create_style,methods=["POST"])
-app.add_url_rule('/admin/update_style', view_func=update_style,methods=["POST"])
+app.add_url_rule('/update/<id>/style', view_func=get_style)
+app.add_url_rule('/admin/<id>/update_style', view_func=update_style,methods=["POST"])
+#orderType
 app.add_url_rule('/admin/create_order_type', view_func=create_order_type,methods=["POST"])
-app.add_url_rule('/admin/update_order_type',view_func=update_order_type,methods=["POST"])
+#app.add_url_rule('//update/<id>/order_type', view_func=get_order_type)
+app.add_url_rule('/admin/<id>/update_order_type',view_func=update_order_type,methods=["POST"])
 
 # Kitchen Staff Dashboard
 app.add_url_rule('/store/logout', view_func=store_logout)

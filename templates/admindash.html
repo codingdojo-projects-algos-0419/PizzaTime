@@ -27,7 +27,7 @@
                          {% endfor %}
                          placeholder:0
                      }
-                     
+
                      var style_table={
                          {% for style in styles %}
                          {{style.id}}:{
@@ -38,7 +38,7 @@
                          {% endfor %}
                          placeholder:0
                      };
-                     
+
                      var topping_menu_table={
                          {% for topping in topping_menu %}
                          {{topping.id}}:{
@@ -50,7 +50,7 @@
                          placeholder:0
                      };
 
-                     
+
                });
           </script>
      </head>
@@ -73,7 +73,7 @@
                        <div id="tabs-1" class="section">
                             <div class="row">
                                <div class="col-8">
-                                    <table class="table table-striped table-dark">
+                                    <table id="tableData" class="table table-striped table-dark">
                                          <thead>
                                               <tr>
                                                    <th scope="col">
@@ -91,17 +91,20 @@
                                               {% for topping in topping_menu: %}
                                               <tr topping_id="{{topping.id}}">
                                                    <td><input type="checkbox" name="active-toppings-bulk" value="">
-                                                   <label for="active-toppings-bulk"></label></td>
-                                                   <td contenteditable='true'>{{topping.name}}</td>
-                                                   <td>{{topping.price}}</td>
-                                                   <td>{{topping.description}}</td>
-                                                   <td><a href="#" class="btn btn-sm btn-danger">UPDATE</a></td>
-                                              </tr>
+                                                   <label for="active-toppings-bulk" row_id="{{topping.id}}"></label></td>
+                                                   <td contenteditable="true" class="rowData" >{{topping.name}}</td>
+                                                   <td contenteditable="true" class="rowData" >{{topping.price}}</td>
+                                                   <td contenteditable="true" class="rowData" >{{topping.description}}</td>
+                                                   <td><a href="/update/{{topping.id}}/top" class="btn btn-sm btn-danger" >UPDATE</a></td>
+                                                   <!-- <td><button type="button" id="btn_save" id="update_btn" class="btn btn-sm btn-primary">Save</button></td> -->
+                                                   <!-- <td><button type="button" id="btn_cancel" class="btn btn-sm btn-secondary">Cancel</button></td> -->
+
                                               {% endfor %}
                                               <!-- end template loops here -->
                                          </tbody>
                                     </table>
                                </div>
+
                                <div class="col-4">
                                     <h3 class="h4">CREATE NEW TOPPING</h3>
                                     <form id="new_topping_form" class="" action="/admin/create_topping" method="post">
@@ -146,9 +149,10 @@
                                                      <td><input type="checkbox" name="active-toppings-bulk" value="">
                                                      <label for="active-toppings-bulk"></label></td>
                                                      <td>{{style.name}}</td>
-                                                     <td>{{style.price}}</td>
                                                      <td>{{style.description}}</td>
-                                                     <td><a href="#" class="btn btn-sm btn-danger">UPDATE</a></td>
+                                                     <td>{{style.price}}</td>
+
+                                                     <td><a href="/update/{{style.id}}/style" class="btn btn-sm btn-danger">UPDATE</a></td>
                                                 </tr>
                                                 {% endfor %}
                                                 <!-- end template loops here -->
@@ -187,9 +191,9 @@
                                                           <!-- <label for="active-toppings-bulk"></label> -->
                                                      </th>
                                                      <th scope="col">Size</th>
-                                                     <th scope="col">Description</th>
                                                      <th scope="col">Price</th>
-                                                     <th scope="col">Topping Scaling</th>
+                                                     <th scope="col">Description</th>
+                                                     <th scope="col">Scaling</th>
                                                      <th scope="col">Action</th>
                                                 </tr>
                                            </thead>
@@ -203,7 +207,8 @@
                                                      <td>{{size.price}}</td>
                                                      <td>{{size.description}}</td>
                                                      <td>{{size.scaling}}</td>
-                                                     <td><a href="#" class="btn btn-sm btn-danger">UPDATE</a></td>
+
+                                                     <td><a href="/update/{{size.id}}/size" class="btn btn-sm btn-danger">UPDATE</a></td>
                                                 </tr>
                                                 {% endfor %}
                                                 <!-- end template loops here -->
@@ -220,6 +225,10 @@
                                            <div class="form-group">
                                                 <label for="description">Description</label>
                                                 <textarea class="form-control" name="description" rows="4" cols="40"></textarea>
+                                           </div>
+                                           <div class="form-group">
+                                                <label for="name">Scaling</label>
+                                                <input type="number" class="form-control" name="scaling" value="">
                                            </div>
                                            <div class="form-group">
                                                 <label for="price">Price</label>

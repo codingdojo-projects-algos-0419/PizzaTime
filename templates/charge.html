@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Black Belt Pizza</title>
+    <title>Black Belt Pizza | Order Placed</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script>
         $(function(){
             $("#fav_button").click(function(){
@@ -27,32 +28,39 @@
                     $("button").text("Made your Fav!");
                     $("button").removeClass("btn-primary");
                     $("button").addClass("btn-success");
-                    $("button").attr("disabled", true); 
+                    $("button").attr("disabled", true);
                 });
             });
         });
     </script>
 </head>
 <body>
-    <div class="container section">
-        <h1>Your order had been sent to the kitchen:</h1>
-        <p>Order #({{order.id}}): {{order.order_type.name}}:
-        {{order.customer.name}} ({{order.customer.phone_number}}), {{order.customer.addresses[0].street_address}}, {{order.customer.addresses[0].city}} {{order.customer.addresses[0].state.name}}
-        </p>
-        <ol>
-            {% for pizza in order.pizzas %}
-            <li>Qty {{pizza.qty}}, Size {{pizza.size.name}}, {{pizza.style.name}} crust:
-                {% for topping in pizza.toppings %}
-                    {{topping.info.name}}
-                {% endfor %}
-            </li>
-            {% endfor %}
-        </ol>
-        {% set amount_str="%.2f" % (amount/100) %}
-        <h2>Thanks, you paid <strong>${{amount_str}}</strong>!</h2>
-        <p>A team highly trained in ancient arts is now working furiously to bring your wishes into reality!</p>
-        <p>Before you go...</p>
-        <button id="fav_button" class="btn btn-sm btn-primary">MAKE THIS ORDER MY FAVORITE!</button>
-    </div>
+     <div class="container">
+          <div class="header">
+               <div id="nav"></div>
+               <h1>Your order had been sent to the kitchen:</h1>
+          </div>
+
+     </div>
+     <div class="section">
+          <p>Order #({{order.id}}): {{order.order_type.name}}:
+          {{order.customer.name}} ({{order.customer.phone_number}}), {{order.customer.addresses[0].street_address}}, {{order.customer.addresses[0].city}} {{order.customer.addresses[0].state.name}}
+          </p>
+          <ol>
+              {% for pizza in order.pizzas %}
+              <li>Qty {{pizza.qty}}, Size {{pizza.size.name}}, {{pizza.style.name}} crust:
+                  {% for topping in pizza.toppings %}
+                      {{topping.info.name}}
+                  {% endfor %}
+              </li>
+              {% endfor %}
+          </ol>
+          {% set amount_str="%.2f" % (amount/100) %}
+          <h2>Thanks, you paid <strong>${{amount_str}}</strong>!</h2>
+          <p>Before you go...</p>
+          <button class="btn-primary">MAKE THIS ORDER MY FAVORITE!</button>
+     </div>
+     <script src="https://unpkg.com/ionicons@4.5.5/dist/ionicons.js"></script>
+     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>
