@@ -170,7 +170,7 @@ def add_pizza():
 def cust_account():
     customer_id=session['MyWebsite_customer_id']
     customer=Customer.get(customer_id)
-    cust_address=Address.query.get(customer_id)
+    cust_address=customer.address[0]
     print('*'*90)
     print(cust_address)
     #Get past orders
@@ -185,6 +185,8 @@ def cust_account():
 def cust_update():
     update = Customer.edit_user(request.form)
     return redirect('/account')
+
+#delete a single pizza
 
 #delete pizza order
 def start_over(id):

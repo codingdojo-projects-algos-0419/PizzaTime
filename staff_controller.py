@@ -41,11 +41,15 @@ def create_topping():
     # return render_template('topping_menu_item.html',topping=new_topping)
     return redirect('/admin/dash')
 
-def update_topping():
+def get_topping(id):
+    topping=ToppingMenu.query.get(id)
+    return render_template('top.html', topping = topping)
+
+def update_topping(id):
     print(request.form)
-    topping=ToppingMenu.query.get(request.form['topping_id'])
+    topping=ToppingMenu.query.get(id)
     topping.update(request.form)
-    return "OK"
+    return redirect('/admin/dash')
 
 def update_topping_availability():
     print(request.form)
@@ -56,8 +60,12 @@ def create_style():
     new_style=Style.new(request.form['name'],request.form['description'],request.form['price'])
     return redirect('/admin/dash')
 
-def update_style():
-    style=Style.query.get(request.form['style_id'])
+def get_style(id):
+    style=Style.query.get(id)
+    return render_template('style.html', style = style)
+
+def update_style(id):
+    style=Style.query.get(id)
     style.update(request.form)
     return redirect('/admin/dash')
 
@@ -66,8 +74,12 @@ def create_size():
     new_size=Size.new(request.form['name'],request.form['description'],request.form['price'])
     return redirect('/admin/dash')
 
-def update_size():
-    size=Size.query.get(request.form['size_id'])
+def get_size(id):
+    size=Size.query.get(id)
+    return render_template('size.html', size = size)
+
+def update_size(id):
+    size=Size.query.get(id)
     size.update(request.form)
     return redirect('/admin/dash')
 
@@ -75,8 +87,12 @@ def create_order_type():
     order_type=OrderType.new(request.form['name'])
     return redirect('/admin/dash')
 
-def update_order_type():
-    order_type=OrderType.query.get(request.form['order_type_id'])
+def get_order_type(id):
+    order_type=OrderType.query.get(id)
+    return render_template('type.html')
+
+def update_order_type(id):
+    order_type=OrderType.query.get(id)
     order_type.update(request.form['name'])
     return redirect('/admin/dash')
 
