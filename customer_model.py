@@ -132,11 +132,16 @@ class Customer(db.Model):
         return session_key
 #
     @classmethod
-    def edit_user(cls,form):
-        cust_update = Customer.query.get(session['MyWebsite_customer_id'])
+    def edit_user(cls,customer_id,form):
+        cust_update = Customer.get(customer_id)
         cust_update.name = form['name']
         cust_update.email = form['email']
         cust_update.phone_number = form['phone']
+        address=cust_update.addresses[0]
+        address.street_address=form['street_address']
+        address.city=form['city']
+        state=State.by_name(form['state'])
+        address.state_id=state.id
         db.session.commit()
         return cust_update.name
 

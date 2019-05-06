@@ -198,7 +198,12 @@ def cust_account():
 
 #update customer account
 def cust_update():
-    update = Customer.edit_user(request.form)
+    customer_id=session['MyWebsite_customer_id']
+    update = Customer.edit_user(customer_id,request.form)
+    errors=Customer.validate_password(request.form['password'],request.form['confirm_password'])
+    customer=Customer.get(customer_id)
+    if not errors:
+        customer.update_password(request.form['password'])
     return redirect('/account')
 
 #delete a single pizza
