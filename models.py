@@ -48,6 +48,14 @@ class Order(db.Model):
             total+=pizza_price*pizza.qty
         return round(total,2)
     @classmethod
+    def copy(cls,order_id):
+        o_o=Order.query.get(order_id)
+        new_order=cls(customer_id=o_o.customer_id,order_type_id=o_o.order_type_id,status=o_o.status,note=o_o.note)
+        db.session.add(new_order)
+        db.session.commit()
+        # then need to copy pizzas and toppings.
+        return new_order
+    @classmethod
     def new(cls,customer_id,note=""):
         order_type=OrderType.query.first()
         # print('order type:',order_type.name)

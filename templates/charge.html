@@ -34,22 +34,25 @@
     </script>
 </head>
 <body>
-    <h1>Your order had been sent to the kitchen:</h1>
-    <p>Order #({{order.id}}): {{order.order_type.name}}:
-    {{order.customer.name}} ({{order.customer.phone_number}}), {{order.customer.addresses[0].street_address}}, {{order.customer.addresses[0].city}} {{order.customer.addresses[0].state.name}}
-    </p>
-    <ol>
-        {% for pizza in order.pizzas %}
-        <li>Qty {{pizza.qty}}, Size {{pizza.size.name}}, {{pizza.style.name}} crust:
-            {% for topping in pizza.toppings %}
-                {{topping.info.name}}
+    <div class="container section">
+        <h1>Your order had been sent to the kitchen:</h1>
+        <p>Order #({{order.id}}): {{order.order_type.name}}:
+        {{order.customer.name}} ({{order.customer.phone_number}}), {{order.customer.addresses[0].street_address}}, {{order.customer.addresses[0].city}} {{order.customer.addresses[0].state.name}}
+        </p>
+        <ol>
+            {% for pizza in order.pizzas %}
+            <li>Qty {{pizza.qty}}, Size {{pizza.size.name}}, {{pizza.style.name}} crust:
+                {% for topping in pizza.toppings %}
+                    {{topping.info.name}}
+                {% endfor %}
+            </li>
             {% endfor %}
-        </li>
-        {% endfor %}
-    </ol>
-    {% set amount_str="%.2f" % (amount/100) %}
-    <h2>Thanks, you paid <strong>${{amount_str}}</strong>!</h2>
-    <p>Before you go...</p>
-    <button id="fav_button" class="btn-primary">MAKE THIS ORDER MY FAVORITE!</button>
+        </ol>
+        {% set amount_str="%.2f" % (amount/100) %}
+        <h2>Thanks, you paid <strong>${{amount_str}}</strong>!</h2>
+        <p>A team highly trained in ancient arts is now working furiously to bring your wishes into reality!</p>
+        <p>Before you go...</p>
+        <button id="fav_button" class="btn btn-sm btn-primary">MAKE THIS ORDER MY FAVORITE!</button>
+    </div>
 </body>
 </html>

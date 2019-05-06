@@ -131,13 +131,15 @@ def show_custompizza():
 def reorder_favorite():
     customer_id=session['MyWebsite_customer_id']
     # in case the customer has an order already started, we're going to delete it and replace it.
-    order=Order.get_entering(customer_id)
-    if order:
-        Order.delete(order.id)
     customer=Customer.get(customer_id)
-    order=Order.query.get(customer.favorite_order_id)
+    fav_order=Order.query.get(customer.favorite_order_id)
+    order=Order.get_entering(customer_id)
+    print(order)
     if order:
-        order.reorder()
+        if order!=fav_order:
+            Order.delete(order)
+    if fav_order:
+        fav_order.reorder()
     return redirect('/create')
 
 def make_favorite():
