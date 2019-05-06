@@ -76,10 +76,10 @@ class Order(db.Model):
     def get_entering(cls,customer_id):
         order=cls.query.filter(cls.customer_id==customer_id).filter(cls.status==StatusEnum.entering).first()
         return order
-#
     @classmethod
     def get_completed(cls,customer_id):
         orders=cls.query.filter(cls.customer_id==customer_id).filter(cls.status==StatusEnum.completed).all()
+        return orders
 
 class OrderType(db.Model):
     # This will probably just be "pickup" or "delivery":  The table will likely only contain these two records.
@@ -141,6 +141,11 @@ class Pizza(db.Model):
             print("topping: ",topping_id)
             topping=Topping.new(new_pizza.id,topping_id)
         return new_pizza
+    @classmethod
+    def delete(cls, id):
+        pizza=cls.query.get(id)
+        db.session.delete(pizza)
+        db.session.commit()
 
 class Size(db.Model):
     __tablename__="sizes"

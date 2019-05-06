@@ -11,7 +11,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
         $(function(){
-            $("button").click(function(){
+            $("#fav_button").click(function(){
                 console.log("favorite");
                 var fav_data={
                     order_id: {{order.id}},
@@ -50,6 +50,6 @@
     {% set amount_str="%.2f" % (amount/100) %}
     <h2>Thanks, you paid <strong>${{amount_str}}</strong>!</h2>
     <p>Before you go...</p>
-    <button class="btn-primary">MAKE THIS ORDER MY FAVORITE!</button>
+    <button id="fav_button" class="btn-primary">MAKE THIS ORDER MY FAVORITE!</button>
 </body>
 </html>

@@ -8,9 +8,32 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+          $(function(){
+               $("#fav_button").click(function(){
+                  console.log("favorite");
+                  var fav_data={
+                      order_id: {{order.id}},
+                      customer_id: {{order.customer.id}}
+                  };
+                  $.ajax(
+                      {method:"Post",
+                      url:"/favorite/update",
+                      data: { json: JSON.stringify(fav_data)}
+                      //data: { 'customer':{{order.customer.id}},'order_id':{{order.id}} }
+                      }
+                  ).done(function(response){
+                      $("#fav_button").text("Made your Fav!");
+                      $("#fav_button").removeClass("btn-warning");
+                      $("#fav_button").addClass("btn-success");
+                      $("#fav_button").attr("disabled", true); 
+                  });
+              });
+          });
+      </script>
 </head>
 <body>
-    <div class="container">
+    <div class="container section">
         <div id="nav"></div>
         <h2>Your Order</h2>
         <table class="table table-striped table-dark">
@@ -21,7 +44,6 @@
                        <th>Style</th>
                        <th>Toppings</th>
                        <th>Cost</th>
-                       <th>Action</th>
                   </tr>
              </thead>
              <tbody>
@@ -34,20 +56,15 @@
                        <td>{% for topping in pizza.toppings %}
                        {{topping.info.name}}
                        {% endfor %}</td>
-                       <td>${{pizza.price()}}</td>
-                       <td>
-                            <a href="#">remove</a>
-                       </td>
+                       {% set pizza_price="%.2f" % pizza.price() %}
+                       <td>${{pizza_price}}</td>
                   {% endfor%}
                   </tr>
              </tbody>
         </table>
-        <!--  -->
-        <h4>Total: $ {{order.total()}}</h4>
+        {% set order_total="%.2f" % order.total() %}
+        <h4>Total: $ {{order_total}}</h4>
         <!-- <a class="btn btn-sm btn-primary" href="#">Purchase</a> -->
-
-
-        <!-- <h2>Buy for $5.00</h2> -->
         <p></p>
         <form action="/charge" method="POST">
           <!-- On form submit, the credit card info and publishable key are sent to Stripe -->
@@ -64,9 +81,9 @@
             data-email="{{order.customer.email}}">
             {# data-image="http://url_of_deployed_project" #}
             </script>
-            <a class="btn btn-sm btn-warning" href="#">Start Over</a>
-            <a class="btn btn-sm btn-warning" href="#">Make Favorite!</a>
-        </form>
+          </form>
+          <a class="btn btn-sm btn-warning my-3" role="button" href="/create">&laquo Go Back</a>
+          <button id="fav_button" class="btn btn-sm btn-warning my-3" href="#">Make Favorite!</button>
     </div>
     <script src="https://unpkg.com/ionicons@4.5.5/dist/ionicons.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>

@@ -22,6 +22,8 @@ app.add_url_rule('/charge',view_func=charge,methods=['POST'])
 
 ## Order edits
 app.add_url_rule('/remove/<id>/order', view_func=start_over)
+app.add_url_rule('/remove/pizza',view_func=delete_pizza,methods=['POST'])
+app.add_url_rule('/remove/pizzas',view_func=clear_order,methods=['POST'])
 
 ## customer routes
 app.add_url_rule('/quick', view_func=quick)
@@ -29,3 +31,4 @@ app.add_url_rule('/account', view_func=cust_account)
 app.add_url_rule('/account/update', view_func=cust_update, methods=['POST'])
 app.add_url_rule('/favorite',view_func=reorder_favorite)
 app.add_url_rule('/favorite/update',view_func=make_favorite,methods=['POST'])
+

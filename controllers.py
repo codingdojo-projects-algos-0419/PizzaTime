@@ -16,6 +16,8 @@ def show_checkout():
     customer_id=session['MyWebsite_customer_id']
     customer=Customer.get(customer_id)
     order=Order.get_entering(customer.id)
+    if len(order.pizzas)==0:
+        return redirect('/create')
     return render_template('checkout.html',
     order=order,key=stripe_keys['publishable_key'])
 
@@ -164,13 +166,14 @@ def add_pizza():
     if not order:
         order=Order.new(customer_id)
     new_pizza=Pizza.new(order.id,request.form)
-    return redirect('/create')
+    # return redirect('/create')
+    return render_template('line_order.html',pizza=new_pizza)
 
 #render account page
 def cust_account():
     customer_id=session['MyWebsite_customer_id']
     customer=Customer.get(customer_id)
-    cust_address=Address.query.get(customer_id)
+    cust_address=customer.address[0]
     print('*'*90)
     print(cust_address)
     #Get past orders
@@ -196,3 +199,16 @@ def start_over(id):
 def logout():
     session.clear()
     return redirect('/')
+
+def delete_pizza():
+    py_data=json.loads(request.form['json'])
+    print("delete pizza:", py_data['pizza_id'])
+    Pizza.delete(py_data['pizza_id'])
+    return "ok"
+
+def clear_order():
+    py_data=json.loads(request.form['json'])
+    order=Order.query.get(py_data['order_id'])
+    for pizza in order.pizzas:
+        Pizza.delete(pizza.id)
+    return "ok"
