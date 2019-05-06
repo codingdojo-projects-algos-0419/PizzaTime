@@ -223,3 +223,9 @@ def clear_order():
     for pizza in order.pizzas:
         Pizza.delete(pizza.id)
     return "ok"
+
+def get_order_total():
+    customer_id=session['MyWebsite_customer_id']
+    customer=Customer.get(customer_id)
+    order=Order.get_entering(customer.id)
+    return str(order.total())

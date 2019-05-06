@@ -15,7 +15,8 @@
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script>
          $(function(){
-              var order_id={{order.id}}
+               var order_id={{order.id}};
+               var order_total={{order.total()}};
                var price_size={
                     {% for size in sizes %}
                     {{size.id}}:{{size.price}},
@@ -101,7 +102,15 @@
                          method:'POST',
                          url:"/remove/pizza",
                          data:{json: JSON.stringify({'pizza_id':$(this).attr("pizza_id")})}
-                    });
+                    })
+                    .done(function(resp_data){
+                         $.ajax({
+                              method: "GET",
+                              url:"/total"
+                         }).done(function(resp){
+                              $("#order_total").text("Total: $"+resp);
+                         });
+                    });                    
                     $("[tr_pizza_id="+pizza_id+"]").remove();
                });
 
@@ -114,6 +123,12 @@
                     })
                     .done(function(resp_data){
                          $("tbody").append(resp_data);
+                         $.ajax({
+                              method: "GET",
+                              url:"/total"
+                         }).done(function(resp){
+                              $("#order_total").text("Total: $"+resp);
+                         });
                     });
                     return false;
                });
