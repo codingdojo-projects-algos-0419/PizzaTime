@@ -16,6 +16,8 @@ def show_checkout():
     customer_id=session['MyWebsite_customer_id']
     customer=Customer.get(customer_id)
     order=Order.get_entering(customer.id)
+    if len(order.pizzas)==0:
+        return redirect('/create')
     return render_template('checkout.html',
     order=order,key=stripe_keys['publishable_key'])
 
@@ -129,13 +131,15 @@ def show_custompizza():
 def reorder_favorite():
     customer_id=session['MyWebsite_customer_id']
     # in case the customer has an order already started, we're going to delete it and replace it.
-    order=Order.get_entering(customer_id)
-    if order:
-        Order.delete(order.id)
     customer=Customer.get(customer_id)
-    order=Order.query.get(customer.favorite_order_id)
+    fav_order=Order.query.get(customer.favorite_order_id)
+    order=Order.get_entering(customer_id)
+    print(order)
     if order:
-        order.reorder()
+        if order!=fav_order:
+            Order.delete(order)
+    if fav_order:
+        fav_order.reorder()
     return redirect('/create')
 
 def make_favorite():
@@ -164,6 +168,16 @@ def add_pizza():
     if not order:
         order=Order.new(customer_id)
     new_pizza=Pizza.new(order.id,request.form)
+    # return redirect('/create')
+    return render_template('line_order.html',pizza=new_pizza)
+
+def random_pizza():
+    customer_id=session['MyWebsite_customer_id']
+    customer=Customer.get(customer_id)
+    order=Order.get_entering(customer.id)
+    if not order:
+        order=Order.new(customer_id)
+    new_pizza=Pizza.random(order.id)
     return redirect('/create')
 
 #render account page
@@ -198,3 +212,22 @@ def start_over(id):
 def logout():
     session.clear()
     return redirect('/')
+
+def delete_pizza():
+    py_data=json.loads(request.form['json'])
+    print("delete pizza:", py_data['pizza_id'])
+    Pizza.delete(py_data['pizza_id'])
+    return "ok"
+
+def clear_order():
+    py_data=json.loads(request.form['json'])
+    order=Order.query.get(py_data['order_id'])
+    for pizza in order.pizzas:
+        Pizza.delete(pizza.id)
+    return "ok"
+
+def get_order_total():
+    customer_id=session['MyWebsite_customer_id']
+    customer=Customer.get(customer_id)
+    order=Order.get_entering(customer.id)
+    return str(order.total())

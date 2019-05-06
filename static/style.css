@@ -50,6 +50,7 @@ hr {
           background-color: #333;
 
      }
+     
 .nav-item a:link, a:visited {
      color:#fff;
      text-decoration: none;
@@ -57,4 +58,9 @@ hr {
 .dropdown a:hover {
      color:#000;
      text-decoration: none;
+}
+
+.topping_name{
+     display:inline-block;
+     width: 200px;
 }

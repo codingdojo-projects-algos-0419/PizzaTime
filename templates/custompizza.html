@@ -7,84 +7,145 @@
     <title>Black Belt Pizza | Custom Pizza</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+     <!-- jQuery-ui -->
+     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script>
          $(function(){
-          var price_size={
-               {% for size in sizes %}
-               {{size.id}}:{{size.price}},
-               {% endfor %}
-               placeholder:0
-          };
-          var scaling_size={
-               {% for size in sizes %}
-                    {% if size.scaling %}
-               {{size.id}}:{{size.scaling}},
-                    {% else %}
-               {{size.id}}:1,
-                    {% endif %}
-               {% endfor %}
-               placeholder:0
-          }
+               var order_id={{order.id}};
 
-          var price_style={
-               {% for style in styles %}
-               {{style.id}}:{{style.price}},
-               {% endfor %}
-               placeholder:0
-          };
-          var price_topping={
-               {% for topping in toppings_menu %}
-               {{topping.id}}:{{topping.price}},
-               {% endfor %}
-               placeholder:0
-          };
-          calc_preview_price();
-          //$("#pizza_config").on("change","[name='size']",function(){
-          $("#pizza_config").children().change(function(){
-               if ($(this).attr("name")=="size"){
-                    //update topping prices
-                    var scaling=scaling_size[$("[name='size']").val()]
-                    $(".topping_price").each(function(i){
-                         //console.log($(this).attr("topping_id"));
-                         //console.log(price_topping[$(this).attr("topping_id")]);
-                         //console.log(scaling);
-                         let price=price_topping[$(this).attr("topping_id")]*scaling;
-                         $(this).text("$"+price.toFixed(2));
-                    })
+               var price_size={
+                    {% for size in sizes %}
+                    {{size.id}}:{{size.price}},
+                    {% endfor %}
+                    placeholder:0
+               };
+               var scaling_size={
+                    {% for size in sizes %}
+                         {% if size.scaling %}
+                    {{size.id}}:{{size.scaling}},
+                         {% else %}
+                    {{size.id}}:1,
+                         {% endif %}
+                    {% endfor %}
+                    placeholder:0
                }
-               let preview_price=(price_size[$("[name='size']").val()]+ price_style[$("[name='style']").val()]);
-               $("[name='topping']").each(function(i){
-                    if ($(this).prop("checked")){
-                         //console.log($(this).val());
-                         preview_price+=price_topping[$(this).val()]
+
+               var price_style={
+                    {% for style in styles %}
+                    {{style.id}}:{{style.price}},
+                    {% endfor %}
+                    placeholder:0
+               };
+               var price_topping={
+                    {% for topping in toppings_menu %}
+                    {{topping.id}}:{{topping.price}},
+                    {% endfor %}
+                    placeholder:0
+               };
+
+               // Calculates a live price of a pizza with the current configuration
+               //$("#pizza_config").on("change","[name='size']",function(){
+               $("#pizza_config").children().change(function(){
+                    if ($(this).attr("name")=="size"){
+                         //update topping prices
+                         var scaling=scaling_size[$("[name='size']").val()]
+                         $(".topping_price").each(function(i){
+                              //console.log($(this).attr("topping_id"));
+                              //console.log(price_topping[$(this).attr("topping_id")]);
+                              //console.log(scaling);
+                              let price=price_topping[$(this).attr("topping_id")]*scaling;
+                              $(this).text("$"+price.toFixed(2));
+                         })
                     }
-               })
-               console.log(preview_price);
-               $("#preview_price").text("$"+preview_price.toFixed(2)+" ea");
+                    let preview_price=(price_size[$("[name='size']").val()]+ price_style[$("[name='style']").val()]);
+                    $("[name='topping']").each(function(i){
+                         if ($(this).prop("checked")){
+                              //console.log($(this).val());
+                              preview_price+=price_topping[$(this).val()]
+                         }
+                    })
+                    //console.log(preview_price);
+                    $("#preview_price").text("$"+preview_price.toFixed(2)+" ea");
+               });
+
+               calc_preview_price();
+               //just calling this on load.  Could be cleaned up to avoid duplicate code
+               function calc_preview_price(){
+                    if ($(this).attr("name")=="size"){
+                         var scaling=scaling_size[$("[name='size']").val()]
+                         $(".topping_price").each(function(i){
+                              let price=price_topping[$(this).attr("topping_id")]*scaling;
+                              $(this).text("$"+price.toFixed(2));
+                         })
+                    }
+                    let preview_price=(price_size[$("[name='size']").val()]+ price_style[$("[name='style']").val()]);
+                    $("[name='topping']").each(function(i){
+                         if ($(this).prop("checked")){
+                              //console.log($(this).val());
+                              preview_price+=price_topping[$(this).val()]
+                         }
+                    })
+                    console.log(preview_price);
+                    $("#preview_price").text("$"+preview_price.toFixed(2)+" ea");
+               }
+
+               // Remove a pizza from the order table
+               //$(".remove_pizza").click(function(){
+               $("tbody").on("click",".remove_pizza",function(e){
+                    console.log("delete pizza " +$(this).attr("pizza_id"));
+                    let pizza_id=$(this).attr("pizza_id");
+                    $.ajax({
+                         method:'POST',
+                         url:"/remove/pizza",
+                         data:{json: JSON.stringify({'pizza_id':$(this).attr("pizza_id")})}
+                    })
+                    .done(function(resp_data){
+                         $.ajax({
+                              method: "GET",
+                              url:"/total"
+                         }).done(function(resp){
+                              $("#order_total").text("Total: $"+resp);
+                         });
+                    });
+                    $("[tr_pizza_id="+pizza_id+"]").remove();
+               });
+
+               // Add a pizza to the order
+               $("#pizza_config").submit(function(){
+                    $.ajax({
+                         method: $(this).attr("method"),
+                         url: $(this).attr("action"),
+                         data:$(this).serialize()
+                    })
+                    .done(function(resp_data){
+                         $("tbody").append(resp_data);
+                         $.ajax({
+                              method: "GET",
+                              url:"/total"
+                         }).done(function(resp){
+                              $("#order_total").text("Total: $"+resp);
+                         });
+                    });
+                    return false;
+               });
+
+               // Clear all the pizzas from the current order
+               $("#clear_order").click(function(){
+                    //console.log("clear order");
+                    $.ajax({
+                         method: "POST",
+                         url: "/remove/pizzas",
+                         data: {json: JSON.stringify({"order_id":order_id})}
+                    })
+                    $("tbody").html(null);
+                    $("#order_total").text("Total: $0.00");
+               });
           });
 
-          //just calling this on load.  Could be cleaned up to avoid duplicate code
-          function calc_preview_price(){
-               if ($(this).attr("name")=="size"){
-                    var scaling=scaling_size[$("[name='size']").val()]
-                    $(".topping_price").each(function(i){
-                         let price=price_topping[$(this).attr("topping_id")]*scaling;
-                         $(this).text("$"+price.toFixed(2));
-                    })
-               }
-               let preview_price=(price_size[$("[name='size']").val()]+ price_style[$("[name='style']").val()]);
-               $("[name='topping']").each(function(i){
-                    if ($(this).prop("checked")){
-                         //console.log($(this).val());
-                         preview_price+=price_topping[$(this).val()]
-                    }
-               })
-               console.log(preview_price);
-               $("#preview_price").text("$"+preview_price.toFixed(2)+" ea");
-          }
-         });
     </script>
 </head>
 <body>
@@ -107,7 +168,7 @@
                            </thead>
                            <tbody>
                                 {% for pizza in order.pizzas %}
-                                <tr>
+                                <tr tr_pizza_id="{{pizza.id}}">
                                      <td>{{pizza.qty}}</td>
                                      <!-- <td><input type="number" name="qty" value="{{pizza.qty}}"></td> -->
 
@@ -126,26 +187,29 @@
                                           ${{pizza_price}}
                                      </td>
                                      <td>
-                                          <div class="dropdown">
+                                          <!-- <div class="dropdown">
                                                <button class="btn btn-link btn-sm dropdown-toggle btn-reveal" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><ion-icon name="ios-more"></ion-icon></button>
                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item" href="#">Update</a>
-                                                    <a class="dropdown-item text-danger" href="#">Remove</a>
-                                               </div>
-                                          </div>
+                                                    <a class="dropdown-item" href="#">Update</a> -->
+                                                    <!-- <a class="dropdown-item text-danger" pizza_id="{{pizza.id}}" href="#">Remove</a> -->
+                                                    <!-- <button class="remove_pizza dropdown-item text-danger" pizza_id="{{pizza.id}}">Remove</button> -->
+                                                    <button class="remove_pizza btn btn-sm btn-danger" pizza_id="{{pizza.id}}">Remove</button>
+                                               <!-- </div>
+                                          </div> -->
                                      </td>
                                      <!-- <td>
                                           <a href="#">update</a>
                                           <a href="#">remove</a>
                                      </td> -->
-                                {% endfor%}
-                                </tr>
+                              </tr>
+                              {% endfor%}
                            </tbody>
                       </table>
                       <!--  -->
                       {% set total_str="%.2f" % order.total() %}
-                      <p>Total: ${{total_str}}</p>
+                      <p id="order_total">Total: ${{total_str}}</p>
                       <a class="btn btn-sm btn-primary" href="/checkout">Submit Order</a>
+                      <button id="clear_order" class="btn btn-sm btn-danger mx-3">CLEAR</button>
                  </div>
                  <div class="col-lg-4">
                       <form id="pizza_config" action="/add_pizza" method="POST">
@@ -189,7 +253,7 @@
                               {% endfor %}
                           </div>
                           <p id="preview_price"> </p>
-                          <input class="btn btn-sm btn-primary" type="submit" value="ADD TO ORDER">
+                          <input id="add_pizza" class="btn btn-sm btn-primary" type="submit" value="ADD TO ORDER">
                       </form>
                  </div>
             </div>

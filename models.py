@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from sqlalchemy.sql import func, and_,or_
 from config import *
 import enum
+import random
 
 class StatusEnum(enum.Enum):
     # enum to track the current status of an order
@@ -48,6 +49,14 @@ class Order(db.Model):
             total+=pizza_price*pizza.qty
         return round(total,2)
     @classmethod
+    def copy(cls,order_id):
+        o_o=Order.query.get(order_id)
+        new_order=cls(customer_id=o_o.customer_id,order_type_id=o_o.order_type_id,status=o_o.status,note=o_o.note)
+        db.session.add(new_order)
+        db.session.commit()
+        # then need to copy pizzas and toppings.
+        return new_order
+    @classmethod
     def new(cls,customer_id,note=""):
         order_type=OrderType.query.first()
         # print('order type:',order_type.name)
@@ -76,10 +85,10 @@ class Order(db.Model):
     def get_entering(cls,customer_id):
         order=cls.query.filter(cls.customer_id==customer_id).filter(cls.status==StatusEnum.entering).first()
         return order
-#
     @classmethod
     def get_completed(cls,customer_id):
         orders=cls.query.filter(cls.customer_id==customer_id).filter(cls.status==StatusEnum.completed).all()
+        return orders
 
 class OrderType(db.Model):
     # This will probably just be "pickup" or "delivery":  The table will likely only contain these two records.
@@ -141,6 +150,24 @@ class Pizza(db.Model):
             print("topping: ",topping_id)
             topping=Topping.new(new_pizza.id,topping_id)
         return new_pizza
+    @classmethod
+    def random(cls,order_id):
+        size_id=random.randint(1,Size.query.count())
+        style_id=random.randint(1,Style.query.count())
+        qty="1"
+        new_pizza=cls(order_id=order_id,size_id=size_id,style_id=style_id,qty=qty)
+        db.session.add(new_pizza)
+        db.session.commit()
+        for i in range(1,random.randint(1,4)):
+            topping_id=random.randint(1,ToppingMenu.query.count())
+            print("topping: ",topping_id)
+            topping=Topping.new(new_pizza.id,topping_id)
+        return new_pizza
+    @classmethod
+    def delete(cls, id):
+        pizza=cls.query.get(id)
+        db.session.delete(pizza)
+        db.session.commit()
 
 class Size(db.Model):
     __tablename__="sizes"

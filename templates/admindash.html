@@ -7,9 +7,52 @@
           <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
           <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/dark-hive/jquery-ui.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+          <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
           <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
           <script src="{{ url_for('static', filename='admin.js') }}"></script>
+          <script>
+               $(function(){
+                    var size_table={
+                         {% for size in sizes %}
+                         {{size.id}}:{
+                             'name': '{{size.name}}',
+                             'description': '{{size.description}}',
+                             {% if not size.scaling: %}
+                             'scaling': 1,
+                             {% else %}
+                             'scaling': {{size.scaling}}',
+                             {% endif %}
+                             'price' : {{size.price}}
+                         },
+                         {% endfor %}
+                         placeholder:0
+                     }
+
+                     var style_table={
+                         {% for style in styles %}
+                         {{style.id}}:{
+                             'name': '{{style.name}}',
+                             'description': '{{style.description}}',
+                             'price' : {{style.price}}
+                         },
+                         {% endfor %}
+                         placeholder:0
+                     };
+
+                     var topping_menu_table={
+                         {% for topping in topping_menu %}
+                         {{topping.id}}:{
+                             'name': '{{topping.name}}',
+                             'description': '{{topping.description}}',
+                             'price' : {{topping.price}}
+                         },
+                         {% endfor %}
+                         placeholder:0
+                     };
+
+
+               });
+          </script>
      </head>
      <body>
           <div class="container">
@@ -46,7 +89,7 @@
                                          <tbody>
                                               <!-- add templete loop here -->
                                               {% for topping in topping_menu: %}
-                                              <tr>
+                                              <tr topping_id="{{topping.id}}">
                                                    <td><input type="checkbox" name="active-toppings-bulk" value="">
                                                    <label for="active-toppings-bulk" row_id="{{topping.id}}"></label></td>
                                                    <td contenteditable="true" class="rowData" >{{topping.name}}</td>
@@ -64,7 +107,7 @@
 
                                <div class="col-4">
                                     <h3 class="h4">CREATE NEW TOPPING</h3>
-                                    <form class="" action="/admin/create_topping" method="post">
+                                    <form id="new_topping_form" class="" action="/admin/create_topping" method="post">
                                          <div class="form-group">
                                               <label for="top_name">Name</label>
                                              <input type="text" class="form-control" name="top_name" value="">
@@ -102,7 +145,7 @@
                                            <tbody>
                                                 <!-- add templete loop here -->
                                                 {% for style in styles: %}
-                                                <tr>
+                                                <tr style_id="{{style.id}}">
                                                      <td><input type="checkbox" name="active-toppings-bulk" value="">
                                                      <label for="active-toppings-bulk"></label></td>
                                                      <td>{{style.name}}</td>
@@ -118,7 +161,7 @@
                                  </div>
                                  <div class="col-4">
                                       <h3 class="h4">CREATE NEW Style</h3>
-                                      <form class="" action="/admin/create_style" method="post">
+                                      <form id="new_style_form" class="" action="/admin/create_style" method="post">
                                            <div class="form-group">
                                                 <label for="name">Name</label>
                                                 <input type="text" class="form-control" name="name" value="">
@@ -157,7 +200,7 @@
                                            <tbody>
                                                 <!-- add templete loop here -->
                                                 {% for size in sizes: %}
-                                                <tr>
+                                                <tr size_id="{{size.id}}">
                                                      <td><input type="checkbox" name="active-toppings-bulk" value="">
                                                      <label for="active-toppings-bulk"></label></td>
                                                      <td>{{size.name}}</td>
@@ -173,8 +216,8 @@
                                       </table>
                                  </div>
                                  <div class="col-4">
-                                      <h3 class="h4">CREATE NEW Style</h3>
-                                      <form class="" action="/admin/create_size" method="post">
+                                      <h3 class="h4">CREATE NEW SIZE</h3>
+                                      <form id="new_size_form" class="" action="/admin/create_size" method="post">
                                            <div class="form-group">
                                                 <label for="name">Name</label>
                                                 <input type="text" class="form-control" name="name" value="">
@@ -191,6 +234,10 @@
                                                 <label for="price">Price</label>
                                                 <input type="text" class="form-control" name="price" value="">
                                            </div>
+                                           <div class="form-group">
+                                                  <label for="scaling">Toppings Price Scaling</label>
+                                                  <input type="text" class="form-control" name="scaling" value="1.0">
+                                             </div>
                                            <input type="submit" class="btn btn-sm btn-primary" value="ADD">
                                       </form>
                                  </div>

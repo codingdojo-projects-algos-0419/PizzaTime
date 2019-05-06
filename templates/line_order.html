@@ -1,0 +1,22 @@
+<tr tr_pizza_id="{{pizza.id}}">
+        <td>{{pizza.qty}}</td>
+        <!-- <td><input type="number" name="qty" value="{{pizza.qty}}"></td> -->
+
+        <td>{{pizza.size.name}}</td>
+        <!-- <td><input type="text" name="pizza_size" value="{{pizza.size.name}}"></td> -->
+
+        <td>{{pizza.style.name}}</td>
+        <!-- <td><input type="text" name="pizza_style" value="{{pizza.style.name}}"></td> -->
+
+        <td>{% for topping in pizza.toppings %}
+              {{topping.info.name}}
+            {% endfor %}
+        </td>
+        <td>
+             {% set pizza_price="%.2f" % pizza.price() %}
+             ${{pizza_price}}
+        </td>
+        <td>
+            <button class="remove_pizza btn btn-sm btn-danger" pizza_id="{{pizza.id}}">Remove</button>
+        </td>
+ </tr>

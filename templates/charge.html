@@ -12,7 +12,7 @@
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script>
         $(function(){
-            $("button").click(function(){
+            $("#fav_button").click(function(){
                 console.log("favorite");
                 var fav_data={
                     order_id: {{order.id}},
