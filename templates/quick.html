@@ -17,19 +17,21 @@
                <div class="section">
                     <div id="quick">
                          <h1  class="h4">QUICK OPTIONS</h1>
+                         <h4>Konichiwa, {{name}} Sama!</h4>
+                         <p>What do you want to order today?</p>
                          <div class="row">
                               <div class="col-lg-4 col-sm-4 quick">
+                                   <h2>New Order</h2>
                                    <ul>
-                                        <li>Small Pizza</li>
-                                        <li>Medium Pizza</li>
-                                        <li>Large Pizza</li>
+                                        <li>Create your own fully cusomtomized pizzas:</li>
                                    </ul>
-                                   <a href="/create" class="btn btn-primary">New Order</a>
+                                   <a href="/create" class="btn btn-lg  my-3 btn-primary">New Order</a>
                               </div>
                               <div class="col-lg-4 col-sm-4 quick">
-                                   {% if order: %}
-                                   {{order.order_type.name}}:
+                                   <h2>Re-Order Favorite</h2>
                                    <ul>
+                                   {% if order: %}
+                                        {{order.order_type.name}}:
                                         {% for pizza in order.pizzas %}
                                         <li>Qty {{pizza.qty}}, Size {{pizza.size.name}}, {{pizza.style.name}} crust:
                                              {% for topping in pizza.toppings %}
@@ -37,21 +39,19 @@
                                              {% endfor %}
                                         </li>
                                         {% endfor %}
-                                        </ul>
-                                   <a href="/favorite" class="btn btn-primary">Order Favorite</a>
+                                   </ul>
+                                   <a href="/favorite" class="btn btn-lg my-3 btn-primary">Order Favorite</a>
                                    {% else %}
-                                   <ul>
                                         <li>No Favorites Yet</li>
                                    </ul>
                                    {% endif %}
                               </div>
                               <div class="col-lg-4 col-sm-4 quick">
+                                   <h2>Sneak Attack!</h2>
                                    <ul>
-                                        <li>Small Pizza</li>
-                                        <li>Medium Pizza</li>
-                                        <li>Large Pizza</li>
-                                   </ul>
-                                   <a href="/random" class="btn btn-primary">Surprise Me</a>
+                                        <li>Ninja San will use mind reading technique used to generate a pizza based on your Chakra:</li>
+                                   </ul>                                   
+                                   <a href="/random" class="btn btn-lg my-3 btn-primary">Surprise Me</a>
                               </div>
                          </div>
                     </div>

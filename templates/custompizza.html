@@ -16,7 +16,7 @@
     <script>
          $(function(){
                var order_id={{order.id}};
-               var order_total={{order.total()}};
+
                var price_size={
                     {% for size in sizes %}
                     {{size.id}}:{{size.price}},
