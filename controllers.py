@@ -12,6 +12,10 @@ from flask_socketio import SocketIO
 
 
 def show_checkout():
+    if not 'MyWebsite_customer_id' in session.keys():
+        return redirect('/')
+    if not Customer.is_logged_in(session['MyWebsite_customer_id'],session['login_session']):
+        return redirect('/danger')
     #print(stripe_keys['publishable_key'])
     customer_id=session['MyWebsite_customer_id']
     customer=Customer.get(customer_id)
@@ -22,6 +26,10 @@ def show_checkout():
     order=order,key=stripe_keys['publishable_key'])
 
 def charge():
+    if not 'MyWebsite_customer_id' in session.keys():
+        return redirect('/')
+    if not Customer.is_logged_in(session['MyWebsite_customer_id'],session['login_session']):
+        return redirect('/danger')
     # Action route handler from Stripe
     customer_id=session['MyWebsite_customer_id']
     customer=Customer.get(customer_id)
@@ -87,6 +95,10 @@ def do_login():
 
 ## render quick order page
 def quick():
+    if not 'MyWebsite_customer_id' in session.keys():
+        return redirect('/')
+    if not Customer.is_logged_in(session['MyWebsite_customer_id'],session['login_session']):
+        return redirect('/danger')
     name = session['name']
     userid = session['MyWebsite_customer_id']
     print(name)
@@ -102,6 +114,10 @@ def quick():
     )
 
 def show_custompizza():
+    if not 'MyWebsite_customer_id' in session.keys():
+        return redirect('/')
+    if not Customer.is_logged_in(session['MyWebsite_customer_id'],session['login_session']):
+        return redirect('/danger')
     # print('customer id',session['MyWebsite_customer_id'])
     customer_id=session['MyWebsite_customer_id']
     # print('customer id',customer_id)
@@ -129,6 +145,10 @@ def show_custompizza():
     # return render_template('custompizza.html')
 
 def reorder_favorite():
+    if not 'MyWebsite_customer_id' in session.keys():
+        return redirect('/')
+    if not Customer.is_logged_in(session['MyWebsite_customer_id'],session['login_session']):
+        return redirect('/danger')
     customer_id=session['MyWebsite_customer_id']
     # in case the customer has an order already started, we're going to delete it and replace it.
     customer=Customer.get(customer_id)
@@ -143,6 +163,10 @@ def reorder_favorite():
     return redirect('/create')
 
 def make_favorite():
+    if not 'MyWebsite_customer_id' in session.keys():
+        return redirect('/')
+    if not Customer.is_logged_in(session['MyWebsite_customer_id'],session['login_session']):
+        return redirect('/danger')
     #this to respond to AJAX call from checkout page, or charge page
     print("Make Favorite")
     print("Fav_Order",request.form['json'])
@@ -154,6 +178,10 @@ def make_favorite():
 
 ## customer nav partial
 def nav():
+    if not 'MyWebsite_customer_id' in session.keys():
+        return redirect('/')
+    if not Customer.is_logged_in(session['MyWebsite_customer_id'],session['login_session']):
+        return redirect('/danger')
     cust_name = Customer.query.get(session['MyWebsite_customer_id'])
     name = cust_name.name
     return render_template('nav.html',
@@ -161,6 +189,10 @@ def nav():
     )
 
 def add_pizza():
+    if not 'MyWebsite_customer_id' in session.keys():
+        return redirect('/')
+    if not Customer.is_logged_in(session['MyWebsite_customer_id'],session['login_session']):
+        return redirect('/danger')
     customer_id=session['MyWebsite_customer_id']
     customer=Customer.get(customer_id)
     print("add pizza form:",request.form)
@@ -172,6 +204,10 @@ def add_pizza():
     return render_template('line_order.html',pizza=new_pizza)
 
 def random_pizza():
+    if not 'MyWebsite_customer_id' in session.keys():
+        return redirect('/')
+    if not Customer.is_logged_in(session['MyWebsite_customer_id'],session['login_session']):
+        return redirect('/danger')
     customer_id=session['MyWebsite_customer_id']
     customer=Customer.get(customer_id)
     order=Order.get_entering(customer.id)
@@ -182,6 +218,10 @@ def random_pizza():
 
 #render account page
 def cust_account():
+    if not 'MyWebsite_customer_id' in session.keys():
+        return redirect('/')
+    if not Customer.is_logged_in(session['MyWebsite_customer_id'],session['login_session']):
+        return redirect('/danger')
     customer_id=session['MyWebsite_customer_id']
     customer=Customer.get(customer_id)
     cust_address=customer.addresses[0]
@@ -198,6 +238,10 @@ def cust_account():
 
 #update customer account
 def cust_update():
+    if not 'MyWebsite_customer_id' in session.keys():
+        return redirect('/')
+    if not Customer.is_logged_in(session['MyWebsite_customer_id'],session['login_session']):
+        return redirect('/danger')
     customer_id=session['MyWebsite_customer_id']
     update = Customer.edit_user(customer_id,request.form)
     errors=Customer.validate_password(request.form['password'],request.form['confirm_password'])
@@ -206,10 +250,12 @@ def cust_update():
         customer.update_password(request.form['password'])
     return redirect('/account')
 
-#delete a single pizza
-
 #delete pizza order
 def start_over(id):
+    if not 'MyWebsite_customer_id' in session.keys():
+        return redirect('/')
+    if not Customer.is_logged_in(session['MyWebsite_customer_id'],session['login_session']):
+        return redirect('/danger')
     order=Order.get_entering(id)
     db.session.delete(order)
     db.session.commit()
@@ -220,12 +266,20 @@ def logout():
     return redirect('/')
 
 def delete_pizza():
+    if not 'MyWebsite_customer_id' in session.keys():
+        return redirect('/')
+    if not Customer.is_logged_in(session['MyWebsite_customer_id'],session['login_session']):
+        return redirect('/danger')
     py_data=json.loads(request.form['json'])
     print("delete pizza:", py_data['pizza_id'])
     Pizza.delete(py_data['pizza_id'])
     return "ok"
 
 def clear_order():
+    if not 'MyWebsite_customer_id' in session.keys():
+        return redirect('/')
+    if not Customer.is_logged_in(session['MyWebsite_customer_id'],session['login_session']):
+        return redirect('/danger')
     py_data=json.loads(request.form['json'])
     order=Order.query.get(py_data['order_id'])
     for pizza in order.pizzas:
@@ -233,7 +287,14 @@ def clear_order():
     return "ok"
 
 def get_order_total():
+    if not 'MyWebsite_customer_id' in session.keys():
+        return redirect('/')
+    if not Customer.is_logged_in(session['MyWebsite_customer_id'],session['login_session']):
+        return redirect('/danger')
     customer_id=session['MyWebsite_customer_id']
     customer=Customer.get(customer_id)
     order=Order.get_entering(customer.id)
     return str(order.total())
+
+def show_danger():
+    return render_template('danger.html',hacker_ip=request.remote_addr)

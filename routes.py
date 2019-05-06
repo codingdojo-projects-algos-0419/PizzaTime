@@ -33,4 +33,4 @@ app.add_url_rule('/account', view_func=cust_account)
 app.add_url_rule('/account/update', view_func=cust_update, methods=['POST'])
 app.add_url_rule('/favorite',view_func=reorder_favorite)
 app.add_url_rule('/favorite/update',view_func=make_favorite,methods=['POST'])
-
+app.add_url_rule('/danger',view_func=show_danger)
