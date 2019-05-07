@@ -22,37 +22,33 @@
                          <p>What do you want to order today?</p>
                          <div class="row">
                               <div class="col-lg-4 col-sm-4 quick">
-                                   <h2>New Order</h2>
-                                   <ul>
-                                        <li>Create your own fully cusomtomized pizzas:</li>
-                                   </ul>
-                                   <a href="/create" class="btn btn-lg  my-3 btn-primary">New Order</a>
+                              <a href="/create" class="btn btn-lg  my-3 btn-outline-primary">New Order</a>
+                                   <p>Create your own fully cusomtomized pizzas.</p>
                               </div>
                               <div class="col-lg-4 col-sm-4 quick">
-                                   <h2>Re-Order Favorite</h2>
+                                   <a href="/favorite" class="btn btn-lg my-3 btn-outline-primary">Order Favorite</a>
+                                   <p>Re-order your Favorite!</p>
                                    <ul>
                                    {% if order: %}
                                         {{order.order_type.name}}:
                                         {% for pizza in order.pizzas %}
-                                        <li>Qty {{pizza.qty}}, Size {{pizza.size.name}}, {{pizza.style.name}} crust:
+                                        <li>Qty {{pizza.qty}}: Size {{pizza.size.name}}, {{pizza.style.name}} crust
+                                             <ul>
                                              {% for topping in pizza.toppings %}
-                                                  {{topping.info.name}}
+                                                  <li>{{topping.info.name}}</li>
                                              {% endfor %}
+                                             </ul>
                                         </li>
                                         {% endfor %}
                                    </ul>
-                                   <a href="/favorite" class="btn btn-lg my-3 btn-primary">Order Favorite</a>
                                    {% else %}
                                         <li>No Favorites Yet</li>
                                    </ul>
                                    {% endif %}
                               </div>
                               <div class="col-lg-4 col-sm-4 quick">
-                                   <h2>Sneak Attack!</h2>
-                                   <ul>
-                                        <li>Ninja San will use mind reading technique used to generate a pizza based on your Chakra:</li>
-                                   </ul>                                   
-                                   <a href="/random" class="btn btn-lg my-3 btn-primary">Surprise Me</a>
+                                   <a href="/random" class="btn btn-lg my-3 btn-outline-primary">Surprise Me</a>
+                                   <p>Ninja San will use mind reading technique used to generate a pizza based on your Chakra:</p>
                               </div>
                          </div>
                     </div>

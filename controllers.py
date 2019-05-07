@@ -99,19 +99,13 @@ def quick():
         return redirect('/')
     if not Customer.is_logged_in(session['MyWebsite_customer_id'],session['login_session']):
         return redirect('/danger')
-    name = session['name']
     userid = session['MyWebsite_customer_id']
-    print(name)
     customer=Customer.get(userid)
     if customer.favorite_order_id:
         favorite_order=Order.query.get(customer.favorite_order_id)
     else:
         favorite_order=None
-    return render_template('quick.html',
-    name = name,
-    userid = userid,
-    order=favorite_order
-    )
+    return render_template('quick.html',order=favorite_order)
 
 def show_custompizza():
     if not 'MyWebsite_customer_id' in session.keys():

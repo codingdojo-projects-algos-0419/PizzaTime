@@ -37,20 +37,20 @@ hr {
 }
 #quick {
      text-align: center;
-     padding-top: 10%;
      color: #fff;
      /*background-color: #fff;*/
 }
      #quick ul {
-          list-style-type: none;
-          height: 200px;
+          /* list-style-type: none; */
+          /* height: 200px; */
+          text-align: left;
      }
+
      .quick {
           border: 1px solid #fff;
           background-color: #333;
-
      }
-     
+
 .nav-item a:link, a:visited {
      color:#fff;
      text-decoration: none;
