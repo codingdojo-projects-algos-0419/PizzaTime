@@ -1,0 +1,11 @@
+[Unit]
+Description=Gunicorn instance to serve PizzaTime
+After=network.target
+[Service]
+User={{username}}
+Group=www-data
+WorkingDirectory=/home/{{username}}/PizzaTime
+Environment="PATH=/home/{{username}}/PizzaTime/venv/bin"
+ExecStart=/home/{{username}}/PizzaTime/venv/bin/gunicorn --workers 3 --bind unix:PizzaTime.sock -m 007 wsgi:application
+[Install]
+WantedBy=multi-user.target

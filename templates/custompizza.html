@@ -49,18 +49,34 @@
 
                // Calculates a live price of a pizza with the current configuration
                //$("#pizza_config").on("change","[name='size']",function(){
+               $("#size_select").change(function(){
+                    var scaling=scaling_size[$("[name='size']").val()]
+                    console.log(scaling);
+                    $(".topping_price").each(function(i){
+                         //console.log($(this).attr("topping_id"));
+                         //console.log(price_topping[$(this).attr("topping_id")]);
+                         console.log(scaling);
+                         let price=price_topping[$(this).attr("topping_id")]*scaling;
+                         $(this).text("$"+price.toFixed(2));
+                    })
+               });
+               
                $("#pizza_config").children().change(function(){
+                   {# 
                     if ($(this).attr("name")=="size"){
                          //update topping prices
+                         console.log("update prices in size")
                          var scaling=scaling_size[$("[name='size']").val()]
+                         console.log(scaling);
                          $(".topping_price").each(function(i){
                               //console.log($(this).attr("topping_id"));
                               //console.log(price_topping[$(this).attr("topping_id")]);
-                              //console.log(scaling);
+                              console.log(scaling);
                               let price=price_topping[$(this).attr("topping_id")]*scaling;
                               $(this).text("$"+price.toFixed(2));
                          })
-                    }
+                    } 
+                    #}
                     let preview_price=(price_size[$("[name='size']").val()]+ price_style[$("[name='style']").val()]);
                     $("[name='topping']").each(function(i){
                          if ($(this).prop("checked")){
@@ -224,7 +240,7 @@
                           <div class="form-row">
                                <div class="form-group col-md-4">
                                     <label for="size">SIZE</label>
-                                    <select class="form-control" name="size" id="">
+                                    <select id="size_select" class="form-control" name="size" id="">
                                         {% for size in sizes %}
                                         <option value="{{size.id}}">{{size.name}}</option>
                                         {% endfor %}

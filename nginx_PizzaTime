@@ -1,0 +1,8 @@
+server {
+    listen 80;
+    server_name {{your public ip}};
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/home/{{username}}/PizzaTime/PizzaTime.sock;
+    }
+}
