@@ -9,10 +9,4 @@ $(document).ready(function() {
      $('#edit').click(function(){
           $('.editForm').toggle();
      })
-     // //connect to the socket server.
-     // var socket = io.connect('http://' + document.domain + ':' + location.port + '/restdash');
-     // //receive details from server
-     // socket.on('neworder', function(msg) {
-     //      console.log("Received order" + msg);
-     // });
 })

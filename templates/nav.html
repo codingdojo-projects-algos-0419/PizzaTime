@@ -8,7 +8,7 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-link" href="/quick">HOME <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
@@ -32,3 +32,6 @@
       </div>
   </div>
 </nav>
+<script>
+  $("[href='"+location.pathname+"']").parent().addClass('active');
+</script>

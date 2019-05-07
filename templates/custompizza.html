@@ -12,7 +12,6 @@
      <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
      <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script>
          $(function(){
                var order_id={{order.id}};
@@ -166,7 +165,9 @@
 </head>
 <body>
     <div class="container">
-        <div id="nav"></div>
+        <div id="nav">
+          {% include 'nav.html' %}
+        </div>
         <div class="section" id="order-summary">
             <div class="row">
                  <div class="col-lg-7">

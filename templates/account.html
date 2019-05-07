@@ -7,7 +7,6 @@
           <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
           <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-          <script src="{{ url_for('static', filename='script.js') }}"></script>
           <script>
                $(function(){
                     $(".fav_button").click(function(){
@@ -32,14 +31,15 @@
                          $(this).removeClass("btn-primary");
                          $(this).addClass("btn-success");
                          $(this).attr("disabled", true); 
-                         
                     });
                });
           </script>
      </head>
      <body>
           <div class="container">
-               <div id="nav"></div>
+               <div id="nav">
+                    {% include 'nav.html' %}
+               </div>
                <!-- Customer Account page for Pizza Time  -->
                <div class="section">
 
@@ -167,7 +167,8 @@
                                                        {{pizza.size.name}} {{pizza.style.name}} with  
 
                                                        {%for topping in pizza.toppings %} 
-                                                            {{topping.info.name}},
+                                                       {{topping.info.name}}
+                                                            {% if not loop.last %},{% endif %}
                                                        {%endfor%}
                                                        {% endfor %}
 
