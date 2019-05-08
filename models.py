@@ -50,11 +50,20 @@ class Order(db.Model):
         return round(total,2)
     @classmethod
     def copy(cls,order_id):
+        # Make a deep copy of an order
         o_o=Order.query.get(order_id)
         new_order=cls(customer_id=o_o.customer_id,order_type_id=o_o.order_type_id,status=o_o.status,note=o_o.note)
         db.session.add(new_order)
         db.session.commit()
         # then need to copy pizzas and toppings.
+        for pizza in o_o.pizzas:
+            new_pizza=Pizza(order_id=new_order.id,style_id=pizza.style_id,size_id=pizza.size_id,qty=pizza.qty)
+            db.session.add(new_pizza)
+            db.session.commit()
+            for topping in pizza.toppings:
+                new_topping=Topping(pizza_id=new_pizza.id,toppings_menu_id=topping.toppings_menu_id)
+                db.session.add(new_topping)
+                db.session.commit()
         return new_order
     @classmethod
     def new(cls,customer_id,note=""):

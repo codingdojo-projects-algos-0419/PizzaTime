@@ -149,11 +149,15 @@ def reorder_favorite():
     fav_order=Order.query.get(customer.favorite_order_id)
     order=Order.get_entering(customer_id)
     print(order)
+    # if order:
+    #     if order!=fav_order:
+    #         Order.delete(order)
+    # if fav_order:
+    #     fav_order.reorder()
     if order:
-        if order!=fav_order:
-            Order.delete(order)
-    if fav_order:
-        fav_order.reorder()
+        Order.delete(order)
+    order=Order.copy(customer.favorite_order_id)
+    order.reorder()
     return redirect('/create')
 
 def make_favorite():
