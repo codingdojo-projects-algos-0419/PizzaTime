@@ -13,7 +13,7 @@
 <body>
     <div class="container section">
         <div id="nav"></div>
-        <h2>Your Order</h2>
+        <h2>Your Order for {{order.order_type.name}}</h2>
         <table class="table table-striped table-dark">
              <thead>
                   <tr>
@@ -60,7 +60,7 @@
             {# data-image="http://url_of_deployed_project" #}
             </script>
           </form>
-          <a class="btn btn-sm btn-warning my-3" role="button" href="/create">&laquo Go Back</a>
+          <a class="btn btn-sm btn-warning my-3" role="button" href="/create">&laquo; Go Back</a>
           <button id="fav_button" class="btn btn-sm btn-warning my-3" href="#">Make Favorite!</button>
     </div>
     <script src="https://unpkg.com/ionicons@4.5.5/dist/ionicons.js"></script>

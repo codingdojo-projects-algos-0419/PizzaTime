@@ -201,6 +201,18 @@ def add_pizza():
     # return redirect('/create')
     return render_template('line_order.html',pizza=new_pizza)
 
+def set_order_type():
+    if not 'MyWebsite_customer_id' in session.keys():
+        return redirect('/')
+    if not Customer.is_logged_in(session['MyWebsite_customer_id'],session['login_session']):
+        return redirect('/danger')
+    customer_id=session['MyWebsite_customer_id']
+    order=Order.get_entering(customer_id)
+    py_data=json.loads(request.form['json'])
+    print("Set Order Type:", py_data['order_type'])
+    order.set_type(py_data['order_type'])
+    return "ok"
+
 def random_pizza():
     if not 'MyWebsite_customer_id' in session.keys():
         return redirect('/')

@@ -89,7 +89,7 @@
                                          <tbody>
                                               <!-- add templete loop here -->
                                               {% for topping in topping_menu: %}
-                                              <tr topping_id="{{topping.id}}">
+                                              <tr topping_id="{{topping.id}}"></tr>
                                                    <td><input type="checkbox" name="active-toppings-bulk" value="">
                                                    <label for="active-toppings-bulk" row_id="{{topping.id}}"></label></td>
                                                    <td contenteditable="true" class="rowData" >{{topping.name}}</td>

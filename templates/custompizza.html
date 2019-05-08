@@ -68,23 +68,27 @@
                       <!--  -->
                       {% set total_str="%.2f" % order.total() %}
                       <p id="order_total">Total: ${{total_str}}</p>
-                      <a class="btn btn-sm btn-primary" href="/checkout">Submit Order</a>
+                      <a id="submit_order_btn" class="btn btn-sm btn-primary" href="/checkout">Submit Order</a>
                       <button id="clear_order" class="btn btn-sm btn-danger mx-3">CLEAR</button>
                  </div>
                  <div class="col-lg-4">
                       <form id="pizza_config" action="/add_pizza" method="POST">
                           <div class="form-group">
                                <label for="order_type">ORDER TYPE</label>
-                               <select class="form-control" name="order_type" id="">
+                               <select class="form-control" name="order_type" id="order_type">
                                    {% for ordertype in order_types %}
-                                   <option value="{{ordertype.id}}">{{ordertype.name}}</option>
+                                        {% if order.order_type_id==ordertype.id %}
+                                        <option value="{{ordertype.id}}" selected>{{ordertype.name}}</option>
+                                        {% else %}
+                                        <option value="{{ordertype.id}}">{{ordertype.name}}</option>
+                                        {% endif %}
                                    {% endfor%}
                                </select>
                           </div>
                           <div class="form-row">
                                <div class="form-group col-md-5">
                                     <label for="size">SIZE</label>
-                                    <select id="size_select" class="form-control" name="size" id="">
+                                    <select id="size_select" class="form-control" name="size">
                                         {% for size in sizes %}
                                         <option value="{{size.id}}">{{size.name}}</option>
                                         {% endfor %}
@@ -92,7 +96,7 @@
                                </div>
                                <div class="form-group col-md-5">
                                     <label for="style">CRUST</label>
-                                    <select class="form-control" name="style" id="">
+                                    <select class="form-control" name="style" id="style">
                                         {% for style in styles %}
                                         <option value="{{style.id}}" title="{{style.description}}">{{style.name}}</option>
                                         {% endfor %}

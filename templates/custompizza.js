@@ -115,6 +115,16 @@ $(function(){
            $("tbody").html(null);
            $("#order_total").text("Total: $0.00");
       });
+      
+      $("#submit_order_btn").click(function(){
+          //set the order type when submit is clicked
+          console.log("submit order button click");
+          $.ajax({
+              method:"POST",
+              url: "/ordertype",
+              data: {json: JSON.stringify({"order_type":$("#order_type").val()})}
+          });
+      });
  });
 
 </script>

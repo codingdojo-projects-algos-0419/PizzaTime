@@ -48,6 +48,9 @@ class Order(db.Model):
                     pizza_price+=topping.info.price
             total+=pizza_price*pizza.qty
         return round(total,2)
+    def set_type(self,type_id):
+        self.order_type_id=type_id
+        db.session.commit()
     @classmethod
     def copy(cls,order_id):
         # Make a deep copy of an order
