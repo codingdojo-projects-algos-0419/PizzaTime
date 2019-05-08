@@ -27,9 +27,13 @@
           <ol>
               {% for pizza in order.pizzas %}
               <li>Qty {{pizza.qty}}, Size {{pizza.size.name}}, {{pizza.style.name}} crust:
-                  {% for topping in pizza.toppings %}
-                      {{topping.info.name}}
-                  {% endfor %}
+                {% for topping in pizza.toppings %}
+                    {% if loop.last %}
+                         {{topping.info.name}}
+                    {% else %}
+                         {{topping.info.name}},
+                    {% endif %}
+                {% endfor %}
               </li>
               {% endfor %}
           </ol>

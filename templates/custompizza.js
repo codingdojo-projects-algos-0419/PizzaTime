@@ -1,5 +1,5 @@
-// Note: This file must be used as a Jinja template include
 <script>
+// Note: This file must be used as a Jinja template include
 $(function(){
       var order_id={{order.id}};
 
@@ -44,7 +44,7 @@ $(function(){
                 //console.log(scaling);
                 let price=price_topping[$(this).attr("topping_id")]*scaling;
                 $(this).text("$"+price.toFixed(2));
-           })
+           });
       });
 
       function calc_preview_price(){
@@ -54,7 +54,7 @@ $(function(){
                      //console.log($(this).val());
                      preview_price+=price_topping[$(this).val()]
                 }
-           })
+           });
            //console.log(preview_price);
            $("#preview_price").text("$"+preview_price.toFixed(2)+" ea");
       }
@@ -96,6 +96,9 @@ $(function(){
                      url:"/total"
                 }).done(function(resp){
                      $("#order_total").text("Total: $"+resp);
+                });
+                $("[name='topping']").each(function(i){
+                     $(this).prop("checked",false);
                 });
            });
            return false;

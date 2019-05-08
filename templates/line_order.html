@@ -9,7 +9,11 @@
         <!-- <td><input type="text" name="pizza_style" value="{{pizza.style.name}}"></td> -->
 
         <td>{% for topping in pizza.toppings %}
-              {{topping.info.name}}
+                {% if loop.last %}
+                     {{topping.info.name}}
+                {% else %}
+                     {{topping.info.name}},
+                {% endif %}
             {% endfor %}
         </td>
         <td>
