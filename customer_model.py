@@ -83,6 +83,18 @@ class Customer(db.Model):
         #     errors.append("Please enter a valid phone number.")
         return errors
     @classmethod
+    def validate_address(cls,addr):
+        errors=[]
+        if len(addr)<3:
+            errors.append("Please enter your Street Address (at leat 3 characters).")
+        return errors
+    @classmethod
+    def validate_city(cls,name):
+        errors=[]
+        if len(name)<3:
+            errors.append("Please enter your City (at leat 3 characters).")
+        return errors
+    @classmethod
     def validate_info(cls,customer_info):
         errors=[]
         #errors+=validate_username(customer_info['username'])
@@ -90,6 +102,8 @@ class Customer(db.Model):
         errors+=cls.validate_password(customer_info['password'],customer_info['confirm_password'])
         errors+=cls.validate_email(customer_info['email_address'])
         errors+=cls.validate_phone(customer_info['phone_number'])
+        errors+=cls.validate_address(customer_info['street_address'])
+        errors+=cls.validate_city(customer_info['city'])
         return errors
     @classmethod
     def new(cls,customer_info):

@@ -253,11 +253,21 @@ def cust_update():
     if not Customer.is_logged_in(session['MyWebsite_customer_id'],session['login_session']):
         return redirect('/danger')
     customer_id=session['MyWebsite_customer_id']
-    update = Customer.edit_user(customer_id,request.form)
-    errors=Customer.validate_password(request.form['password'],request.form['confirm_password'])
-    customer=Customer.get(customer_id)
+    errors=[]
+    errors+=Customer.validate_name(request.form['name'])
+    errors+=Customer.validate_email(request.form['email'])
+    errors+=Customer.validate_phone(request.form['phone'])
+    errors+=Customer.validate_address(request.form['street_address'])
+    errors+=Customer.validate_address(request.form['city'])
+    if request.form['password']:
+        errors+=Customer.validate_password(request.form['password'],request.form['confirm_password'])
+    for error in errors:
+        flash(error)
     if not errors:
-        customer.update_password(request.form['password'])
+        update = Customer.edit_user(customer_id,request.form)
+        customer=Customer.get(customer_id)
+        if request.form['password']:
+            customer.update_password(request.form['password'])
     return redirect('/account')
 
 #delete pizza order
