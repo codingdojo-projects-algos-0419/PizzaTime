@@ -2,15 +2,16 @@
 <html lang="en" dir="ltr">
      <head>
           <meta charset="utf-8">
-          <meta name="Pizza TIme" content="An intuitive food ordering app.">
-          <title>Black Belt Pizza | Ouick Order</title>
+          <meta name="Pizza Time" content="An intuitive food ordering app.">
+          <title>Black Belt Pizza | Modify Account</title>
           <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
           <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
           <script>
                $(function(){
                     $(".fav_button").click(function(){
-                         console.log("favorite");
+                         //console.log("favorite");
+                         var this_btn=this;
                          var fav_data={
                               order_id: $(this).attr("order_id"),
                               customer_id: {{customer.id}}
@@ -20,17 +21,19 @@
                               url:"/favorite/update",
                               data: { json: JSON.stringify(fav_data)}
                               }
-                         );
-                         $(".fav_button").each(function(i){
-                              $(this).text("Favorite");
-                              $(this).removeClass("btn-success");
-                              $(this).addClass("btn-primary");
-                              $(this).attr("disabled", false); 
-                         })
-                         $(this).text("Favorited");
-                         $(this).removeClass("btn-primary");
-                         $(this).addClass("btn-success");
-                         $(this).attr("disabled", true); 
+                         )
+                         //.done(function(resp){
+                              $(".fav_button").each(function(i){
+                                   $(this).text("Favorite");
+                                   $(this).removeClass("btn-success");
+                                   $(this).addClass("btn-primary");
+                                   $(this).attr("disabled", false); 
+                              });
+                              $(this_btn).text("Favorited");
+                              $(this_btn).removeClass("btn-primary");
+                              $(this_btn).addClass("btn-success");
+                              $(this_btn).attr("disabled", true); 
+                         //});
                     });
                });
           </script>
@@ -135,11 +138,11 @@
                                              </div>
                                         </div>
                                         <div class="form-row">
-                                             <label for="password">Password</label>
+                                             <label for="password">Change Password</label>
                                              <input type="password" class="form-control" name="password" value="">
                                         </div>
                                         <div class="form-row">
-                                             <label for="pw_confirm">Confirm Password</label>
+                                             <label for="pw_confirm">Confirm New Password</label>
                                              <input type="password" class="form-control" name="confirm_password" value="">
                                         </div>
                                         <label for="hidden"></label>

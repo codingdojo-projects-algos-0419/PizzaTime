@@ -10,29 +10,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
-    <script>
-        $(function(){
-            $("#fav_button").click(function(){
-                console.log("favorite");
-                var fav_data={
-                    order_id: {{order.id}},
-                    customer_id: {{order.customer.id}}
-                };
-                $.ajax(
-                    {method:"Post",
-                    url:"/favorite/update",
-                    data: { json: JSON.stringify(fav_data)}
-                    //data: { 'customer':{{order.customer.id}},'order_id':{{order.id}} }
-                    }
-                ).done(function(response){
-                    $("button").text("Made your Fav!");
-                    $("button").removeClass("btn-primary");
-                    $("button").addClass("btn-success");
-                    $("button").attr("disabled", true);
-                });
-            });
-        });
-    </script>
+    {% include 'fav_button.js' %}
 </head>
 <body>
      <div class="container">
@@ -58,7 +36,7 @@
           {% set amount_str="%.2f" % (amount/100) %}
           <h2>Thanks, you paid <strong>${{amount_str}}</strong>!</h2>
           <p>Before you go...</p>
-          <button class="btn-primary">MAKE THIS ORDER MY FAVORITE!</button>
+          <button id="fav_button" class="btn-primary">MAKE THIS ORDER MY FAVORITE!</button>
      </div>
      <script src="https://unpkg.com/ionicons@4.5.5/dist/ionicons.js"></script>
      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
