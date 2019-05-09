@@ -35,7 +35,8 @@ $(function(){
 
       // Calculates a live price of a pizza with the current configuration
       //$("#pizza_config").on("change","[name='size']",function(){
-      $("#size_select").change(function(){
+
+     function scale_topping_prices(){
            var scaling=scaling_size[$("[name='size']").val()]
            //console.log(scaling);
            $(".topping_price").each(function(i){
@@ -45,21 +46,24 @@ $(function(){
                 let price=price_topping[$(this).attr("topping_id")]*scaling;
                 $(this).text("$"+price.toFixed(2));
            });
-      });
+      }
 
       function calc_preview_price(){
+          var scaling=scaling_size[$("[name='size']").val()]
            let preview_price=(price_size[$("[name='size']").val()]+ price_style[$("[name='style']").val()]);
            $("[name='topping']").each(function(i){
                 if ($(this).prop("checked")){
                      //console.log($(this).val());
-                     preview_price+=price_topping[$(this).val()]
+                     preview_price+=price_topping[$(this).val()]*scaling
                 }
            });
            //console.log(preview_price);
            $("#preview_price").text("$"+preview_price.toFixed(2)+" ea");
       }
 
+      $("#size_select").change(scale_topping_prices);
       $("#pizza_config").children().change(calc_preview_price);
+      scale_topping_prices();
       calc_preview_price();
 
       // Remove a pizza from the order table
