@@ -6,6 +6,6 @@ User={{username}}
 Group=www-data
 WorkingDirectory=/home/{{username}}/PizzaTime
 Environment="PATH=/home/{{username}}/PizzaTime/venv/bin"
-ExecStart=/home/{{username}}/PizzaTime/venv/bin/gunicorn --workers 3 --bind unix:PizzaTime.sock -m 007 wsgi:application
+ExecStart=/home/{{username}}/PizzaTime/venv/bin/gunicorn --worker-class eventlet --workers 1 --bind unix:PizzaTime.sock -m 007 wsgi:application
 [Install]
 WantedBy=multi-user.target

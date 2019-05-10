@@ -1,0 +1,8 @@
+Flask SocketIO Deployment Instructions
+
+1.  Install eventlet in your server in your virtual env: `pip install eventlet`
+2.  Edit /etc/systemd/system/{{project}}.service ExecStart line to:  `ExecStart=/home/{{username}}/{{repo name}}/venv/bin/gunicorn --worker-class eventlet --workers 1 --bind unix:{{project}}.sock -m 007 wsgi:application`
+3.  Make the system recognize the updated systemd service file: `systemctl daemon-reload`
+4.  Update the .sock file:  `sudo systemctl start {{project}}` and `sudo systemctl enable {{project}}`
+5.  Reboot the system.  This is just easier because otherwise you have to kill any running instances of gunicorn and get it all restarted with only one worker process.  
+Note:  The original service file has three synchronous workers.  Getting gunicorn switched over to one asynchronous worker process is critical for socketio to work.

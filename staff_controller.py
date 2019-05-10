@@ -57,7 +57,7 @@ def update_topping(id):
     print(request.form)
     topping=ToppingMenu.query.get(id)
     topping.update(request.form)
-    return redirect('/admin/dash')
+    return redirect('/admin/dash#tabs-1')
 
 def update_topping_availability():
     if not 'employee_id' in session.keys():
@@ -74,7 +74,7 @@ def create_style():
         return redirect('/')
     print(request.form)
     new_style=Style.new(request.form['name'],request.form['description'],request.form['price'])
-    return redirect('/admin/dash')
+    return redirect('/admin/dash#tabs-2')
 
 def get_style(id):
     style=Style.query.get(id)
@@ -87,7 +87,7 @@ def update_style(id):
         return redirect('/')
     style=Style.query.get(id)
     style.update(request.form)
-    return redirect('/admin/dash')
+    return redirect('/admin/dash#tabs-2')
 
 def create_size():
     if not 'employee_id' in session.keys():
@@ -96,7 +96,7 @@ def create_size():
         return redirect('/')
     print(request.form)
     new_size=Size.new(request.form['name'],request.form['description'],request.form['price'],request.form['scaling'])
-    return redirect('/admin/dash')
+    return redirect('/admin/dash#tabs-3')
 
 def get_size(id):
     size=Size.query.get(id)
@@ -109,7 +109,7 @@ def update_size(id):
         return redirect('/')
     size=Size.query.get(id)
     size.update(request.form)
-    return redirect('/admin/dash')
+    return redirect('/admin/dash#tabs-3')
 
 def create_order_type():
     if not 'employee_id' in session.keys():
@@ -117,7 +117,7 @@ def create_order_type():
     if not Staff.is_logged_in_as_admin(session['employee_id'],session['login_session']):
         return redirect('/')
     order_type=OrderType.new(request.form['name'])
-    return redirect('/admin/dash')
+    return redirect('/admin/dash#tabs-4')
 
 def get_order_type(id):
     order_type=OrderType.query.get(id)
@@ -130,7 +130,7 @@ def update_order_type(id):
         return redirect('/')
     order_type=OrderType.query.get(id)
     order_type.update(request.form['name'])
-    return redirect('/admin/dash')
+    return redirect('/admin/dash#tabs-4')
 
 #admin account controller
 def admin_acc():
