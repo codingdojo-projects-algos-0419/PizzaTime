@@ -170,10 +170,13 @@ class Pizza(db.Model):
         new_pizza=cls(order_id=order_id,size_id=size_id,style_id=style_id,qty=qty)
         db.session.add(new_pizza)
         db.session.commit()
+        topping_list=[]
         for i in range(1,random.randint(1,4)):
             topping_id=random.randint(1,ToppingMenu.query.count())
             print("topping: ",topping_id)
-            topping=Topping.new(new_pizza.id,topping_id)
+            if topping_id not in topping_list:
+                topping_list.append(topping_id)
+                topping=Topping.new(new_pizza.id,topping_id)
         return new_pizza
     @classmethod
     def delete(cls, id):
