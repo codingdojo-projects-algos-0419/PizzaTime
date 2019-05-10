@@ -27,7 +27,7 @@ def admin_dash():
     if not 'employee_id' in session.keys():
         return redirect('/admin')
     if not Staff.is_logged_in_as_admin(session['employee_id'],session['login_session']):
-        return redirect('/')
+        return redirect('/store')
     topping_menu=ToppingMenu.get_all()
     sizes=Size.get_all()
     styles=Style.get_all()
@@ -137,7 +137,7 @@ def admin_acc():
     if not 'employee_id' in session.keys():
         return redirect('/admin')
     if not Staff.is_logged_in_as_admin(session['employee_id'],session['login_session']):
-        return redirect('/')
+        return redirect('/store')
     cur_staff=Staff.get_all()
     print(cur_staff)
     return render_template('adaccount.html', staff=cur_staff)
